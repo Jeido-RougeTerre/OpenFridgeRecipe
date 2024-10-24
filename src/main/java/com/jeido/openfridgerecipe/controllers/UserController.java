@@ -93,5 +93,4 @@ public class UserController {
         userService.addDieteticIngredient(id, ingredient);
         return ResponseEntity.ok(userService.getUserById(id));
     }
-
 }

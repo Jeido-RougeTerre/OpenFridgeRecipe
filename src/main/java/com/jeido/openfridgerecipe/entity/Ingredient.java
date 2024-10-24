@@ -22,5 +22,4 @@ public class Ingredient {
     @ManyToMany(mappedBy = "ingredientsDietetique")
     private List<User> users;
 
-
 }

@@ -54,10 +54,14 @@ public class User {
     private String password;
 
     public void addFavoriteRecipe(Recette recipe) {
-        this.recettesFav.add(recipe);
+        if (!this.recettesFav.contains(recipe)) {
+            this.recettesFav.add(recipe);
+        }
     }
 
     public void addDieteticAlignement(Ingredient ingredient) {
-        this.ingredientsDietetique.add(ingredient);
+        if (!this.ingredientsDietetique.contains(ingredient)) {
+            this.ingredientsDietetique.add(ingredient);
+        }
     }
 }
