@@ -28,9 +28,9 @@ public class Recipes {
 
 //    private List<String> ingredientsList;
 
-    @ManyToMany(mappedBy = "labelTags")
+    @ManyToMany
     @JoinTable(name = "recipes_tags",
-    joinColumns = @JoinColumn(name = "recipe_id"),
-    inverseJoinColumns = @JoinColumn(name = "tag_id"))
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tags> dieteticAlignment;
 }
