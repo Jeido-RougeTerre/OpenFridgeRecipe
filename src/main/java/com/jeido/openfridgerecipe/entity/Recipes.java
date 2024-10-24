@@ -27,5 +27,10 @@ public class Recipes {
     private long CaloricNb;
 
 //    private List<String> ingredientsList;
-//    private List<String> dieteticAlignment;
+
+    @ManyToMany(mappedBy = "labelTags")
+    @JoinTable(name = "recipes_tags",
+    joinColumns = @JoinColumn(name = "recipe_id"),
+    inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<Tags> dieteticAlignment;
 }
