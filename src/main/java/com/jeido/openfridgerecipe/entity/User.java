@@ -22,7 +22,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id")
-    private UUID id;
+    private String id;
 
     @NotBlank(message = "This field can't be empty !")
     @Size(min=3, max=15, message = "Name should be between 3 and 15 characters long !")
@@ -52,4 +52,12 @@ public class User {
 
     @NotBlank(message = "Password can't be empty!")
     private String password;
+
+    public void addFavoriteRecipe(Recette recipe) {
+        this.recettesFav.add(recipe);
+    }
+
+    public void addDieteticAlignement(Ingredient ingredient) {
+        this.ingredientsDietetique.add(ingredient);
+    }
 }
