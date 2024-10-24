@@ -4,29 +4,36 @@ import com.jeido.openfridgerecipe.dto.RecipesDtoReceive;
 import com.jeido.openfridgerecipe.dto.RecipesDtoSend;
 import com.jeido.openfridgerecipe.entity.Recipes;
 import com.jeido.openfridgerecipe.entity.Tags;
+import com.jeido.openfridgerecipe.exception.NotFoundException;
 import com.jeido.openfridgerecipe.repository.RecipesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
-public class RecipesService {
+public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDtoSend> {
 
     @Autowired
     private RecipesRepository recipesRepository;
 
     public Recipes getById (UUID id){
-        return recipesRepository.findById(id).orElseThrow();
+        return recipesRepository.findById(id).orElseThrow(()->new NotFoundException("film not found at id :"+id));
+    }
+
+    @Override
+    public RecipesDtoSend findById(UUID id) {
+        return recipeToRecipeDtoSend(getById(id));
     }
 
     public List<Recipes> getByTags (Tags tags) {
         return recipesRepository.findByDieteticAlignment(tags);
     }
 
-    public Recipes create (RecipesDtoReceive recipesDtoReceive){
+    @Override
+    public RecipesDtoSend create (RecipesDtoReceive recipesDtoReceive){
         Recipes recipeCreated = Recipes.builder()
                 .name(recipesDtoReceive.getName())
                 .CutleryNb(recipesDtoReceive.getCutleryNb())
@@ -35,13 +42,16 @@ public class RecipesService {
                 .dieteticAlignment(recipesDtoReceive.getDieteticAlignment())
                 .build();
 
-        return recipesRepository.save(recipeCreated);
+        recipesRepository.save(recipeCreated);
+        return recipeToRecipeDtoSend(recipeCreated);
     }
 
-    public List<Recipes> getALl (){
-        return (List<Recipes>) recipesRepository.findAll();
+    @Override
+    public List<RecipesDtoSend> getAll() {
+        return recipesTorecipeDtoSends((List<Recipes>) recipesRepository.findAll());
     }
 
+    @Override
     public RecipesDtoSend update(UUID id, RecipesDtoReceive received) {
         Recipes recipe = getById(id);
         recipe.setName(received.getName());
@@ -53,6 +63,7 @@ public class RecipesService {
         return recipeToRecipeDtoSend(recipe);
     }
 
+    @Override
     public boolean delete(UUID id) {
         Recipes recipe = getById(id);
         recipesRepository.delete(recipe);
@@ -67,6 +78,10 @@ public class RecipesService {
                 .CaloricNb(recipes.getCaloricNb())
                 .dieteticAlignment(recipes.getDieteticAlignment())
                 .build();
+    }
+
+    private List<RecipesDtoSend> recipesTorecipeDtoSends (List<Recipes> recipes){
+        return recipes.stream().map(this::recipeToRecipeDtoSend).collect(Collectors.toList());
     }
 
 }

@@ -1,7 +1,6 @@
 package com.jeido.openfridgerecipe.dto;
 
 import com.jeido.openfridgerecipe.entity.Tags;
-import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

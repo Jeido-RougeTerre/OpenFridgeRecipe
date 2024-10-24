@@ -5,6 +5,7 @@ import com.jeido.openfridgerecipe.dto.RecipesDtoSend;
 import com.jeido.openfridgerecipe.entity.Recipes;
 import com.jeido.openfridgerecipe.entity.Tags;
 import com.jeido.openfridgerecipe.service.RecipesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,14 +25,8 @@ public class RecipesController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RecipesDtoSend>> getRecipes (){
-        List<Recipes> recipesList = recipesService.getALl();
-        List<RecipesDtoSend> recipesDtoSends = new ArrayList<>();
-        for (Recipes recipe : recipesList){
-            recipesDtoSends.add(new RecipesDtoSend(recipe.getId(),recipe.getName(),recipe.getCutleryNb(),recipe.getCaloricNb(),recipe.getDieteticAlignment()));//,recipe.getIngredientsList(),recipe.getDieteticAlignment()));
-        }
-
-        return ResponseEntity.ok(recipesDtoSends);
+    public ResponseEntity<List<RecipesDtoSend>> getAllFilm (){
+        return ResponseEntity.ok(recipesService.getAll());
     }
 
     @GetMapping("{id}")
@@ -54,9 +49,7 @@ public class RecipesController {
 
     @PostMapping
     public ResponseEntity<RecipesDtoSend> createRecipe (@Validated @RequestBody RecipesDtoReceive recipesDtoReceive){
-        Recipes recipe = recipesService.create(recipesDtoReceive);
-        RecipesDtoSend recipesDtoSend = new RecipesDtoSend(recipe.getId(),recipe.getName(),recipe.getCutleryNb(),recipe.getCaloricNb(),recipe.getDieteticAlignment());//,recipe.getIngredientsList(),recipe.getDieteticAlignment());
-        return new ResponseEntity<>(recipesDtoSend,HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(recipesService.create(recipesDtoReceive));
     }
 
     @PutMapping("/{id}")
