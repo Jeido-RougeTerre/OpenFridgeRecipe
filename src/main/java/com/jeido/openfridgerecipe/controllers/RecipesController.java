@@ -5,6 +5,7 @@ import com.jeido.openfridgerecipe.dto.RecipesDtoSend;
 import com.jeido.openfridgerecipe.entity.Recipes;
 import com.jeido.openfridgerecipe.entity.Tags;
 import com.jeido.openfridgerecipe.service.RecipesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,21 +19,17 @@ import java.util.UUID;
 @RequestMapping("/api/recipe")
 public class RecipesController {
 
+    @Autowired
     private RecipesService recipesService;
-    public RecipesController (RecipesService recipesService){
-        this.recipesService = recipesService;
-    }
 
     @GetMapping
     public ResponseEntity<List<RecipesDtoSend>> getAllFilm (){
         return ResponseEntity.ok(recipesService.getAll());
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<RecipesDtoSend> getRecipeById(@PathVariable("id") UUID id){
-        Recipes recipe = recipesService.getById(id);
-        RecipesDtoSend recipesDtoSend = new RecipesDtoSend(recipe.getId(),recipe.getName(),recipe.getCutleryNb(),recipe.getCaloricNb(),recipe.getDieteticAlignment());//,recipe.getIngredientsList(),recipe.getDieteticAlignment());
-        return ResponseEntity.ok(recipesDtoSend);
+    @GetMapping("/{id}")
+    public ResponseEntity<RecipesDtoSend> getRecipeById (@PathVariable("id")UUID id){
+        return ResponseEntity.ok(recipesService.findById(id));
     }
 
     @GetMapping("{tags}")
