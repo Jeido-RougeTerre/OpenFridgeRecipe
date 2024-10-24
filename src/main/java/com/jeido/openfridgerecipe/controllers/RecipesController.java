@@ -5,7 +5,6 @@ import com.jeido.openfridgerecipe.dto.RecipesDtoSend;
 import com.jeido.openfridgerecipe.entity.Recipes;
 import com.jeido.openfridgerecipe.entity.Tags;
 import com.jeido.openfridgerecipe.service.RecipesService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

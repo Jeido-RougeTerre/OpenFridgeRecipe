@@ -48,7 +48,7 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
 
     @Override
     public List<RecipesDtoSend> getAll() {
-        return recipesTorecipeDtoSends((List<Recipes>) recipesRepository.findAll());
+        return recipesToRecipeDtoSends((List<Recipes>) recipesRepository.findAll());
     }
 
     @Override
@@ -80,7 +80,7 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
                 .build();
     }
 
-    private List<RecipesDtoSend> recipesTorecipeDtoSends (List<Recipes> recipes){
+    private List<RecipesDtoSend> recipesToRecipeDtoSends (List<Recipes> recipes){
         return recipes.stream().map(this::recipeToRecipeDtoSend).collect(Collectors.toList());
     }
 
