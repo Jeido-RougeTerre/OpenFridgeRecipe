@@ -1,4 +1,4 @@
-package com.jeido.openfridgerecipe.Repository;
+package com.jeido.openfridgerecipe.repository;
 import com.jeido.openfridgerecipe.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
