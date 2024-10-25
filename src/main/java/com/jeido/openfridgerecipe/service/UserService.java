@@ -1,7 +1,6 @@
 package com.jeido.openfridgerecipe.service;
 
 import com.jeido.openfridgerecipe.entity.Ingredient;
-import com.jeido.openfridgerecipe.entity.Recette;
 import com.jeido.openfridgerecipe.entity.User;
 import org.springframework.stereotype.Service;
 

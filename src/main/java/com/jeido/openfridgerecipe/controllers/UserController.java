@@ -1,7 +1,6 @@
 package com.jeido.openfridgerecipe.controllers;
 
 import com.jeido.openfridgerecipe.entity.Ingredient;
-import com.jeido.openfridgerecipe.entity.Recette;
 import com.jeido.openfridgerecipe.entity.User;
 import com.jeido.openfridgerecipe.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
