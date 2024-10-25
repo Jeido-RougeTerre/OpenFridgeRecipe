@@ -3,7 +3,7 @@ package com.jeido.openfridgerecipe.service;
 import com.jeido.openfridgerecipe.entity.Ingredient;
 import com.jeido.openfridgerecipe.entity.Recette;
 import com.jeido.openfridgerecipe.entity.User;
-import com.jeido.openfridgerecipe.Repository.UserRepository;
+import com.jeido.openfridgerecipe.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
