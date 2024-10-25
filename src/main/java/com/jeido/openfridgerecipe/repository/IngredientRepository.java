@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IngredientRepository extends CrudRepository<Ingredient, String> {
-    Optional<Ingredient> findByName(String name);
     List<Ingredient> findByTags(List<Tags> tags);
 
     List<Ingredient> findByCalories(double calories);

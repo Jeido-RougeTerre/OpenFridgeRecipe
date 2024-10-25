@@ -1,10 +1,13 @@
 package com.jeido.openfridgerecipe.service;
 
+import com.jeido.openfridgerecipe.dto.SearchDTOSend;
 import com.jeido.openfridgerecipe.repository.IngredientRepository;
 import com.jeido.openfridgerecipe.entity.Ingredient;
 import com.jeido.openfridgerecipe.entity.Tags;
 import com.jeido.openfridgerecipe.service.json.IngredientAPIResponse;
+import com.jeido.openfridgerecipe.service.json.IngredientSearchAPIResponse;
 import com.jeido.openfridgerecipe.service.json.Product;
+import com.jeido.openfridgerecipe.service.json.ProductSearch;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -26,10 +29,14 @@ public class IngredientService {
         this.ingredientRepository = ingredientRepository;
     }
 
-    private static final String API_URI = "https://world.openfoodfacts.net/api/v2/";
+    private static final String PRE_API_URI_CODE = "https://world.openfoodfacts.net/api/v2/product/";
+    private static final String POST_API_URI_CODE = "?fields=product_name,nutriments,quantity,labels_tags,allergens_tags";
 
-    private Ingredient mapToIngredient(IngredientAPIResponse ingredientAPIResponse) {
-        Product p = ingredientAPIResponse.getProduct();
+    private static final String PRE_API_URI_SEARCH = "https://world.openfoodfacts.org/cgi/search.pl?search_terms=";
+    private static final String POST_API_URI_SEARCH = "&search_simple=1&action=process&json=1";
+
+    private Ingredient mapToIngredient(IngredientAPIResponse body) {
+        Product p = body.getProduct();
         List<String> tagNames = new ArrayList<>();
         if (p.getAllergensTags() != null) {
             tagNames.addAll(Arrays.stream(p.getAllergensTags()).toList());
@@ -44,7 +51,7 @@ public class IngredientService {
             tagList.add(tagService.parseOrCreate(tag));
         }
         return Ingredient.builder()
-                .code(ingredientAPIResponse.getCode())
+                .code(body.getCode())
                 .name(p.getProductName())
                 .quantity(p.getQuantity())
                 .calories(p.getNutriments().getEnergyKcal())
@@ -52,12 +59,34 @@ public class IngredientService {
                 .build();
     }
 
+    private SearchDTOSend mapToIngredientList(IngredientSearchAPIResponse body) {
+        List<Ingredient> ingList = new ArrayList<>();
+
+        for (ProductSearch product : body.getProducts()) {
+            ingList.add(getIngredientByCode(product.getId()));
+        }
+
+        int prevPage = (body.getPage() > 1)? body.getPage() - 1 : 0;
+        int nextPage = 0; //TODO
+
+
+
+        return SearchDTOSend.builder()
+                .count(body.getCount())
+                .page(body.getPage())
+                .prevPage(prevPage)
+                .pageSize(body.getPageSize())
+                .results(ingList)
+                .build();
+
+    }
+
     public Ingredient getIngredientByCode(String code) {
         return ingredientRepository.findById(code).orElse(getIngredientByCodeInAPI(code));
     }
 
     private Ingredient getIngredientByCodeInAPI(String code) {
-        final String uri = API_URI + "product/" + code + "?fields=product_name,nutriments,quantity,labels_tags,allergens_tags";
+        final String uri = PRE_API_URI_CODE + code + POST_API_URI_CODE;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<IngredientAPIResponse> response = restTemplate.getForEntity(uri, IngredientAPIResponse.class);
         Ingredient ing = mapToIngredient(Objects.requireNonNull(response.getBody()));
@@ -67,6 +96,17 @@ public class IngredientService {
 
         return ing;
     }
+
+    public SearchDTOSend getIngredientsbyName(String name) {
+        final String uri = PRE_API_URI_SEARCH + name + POST_API_URI_SEARCH;
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<IngredientSearchAPIResponse> response = restTemplate.getForEntity(uri, IngredientSearchAPIResponse.class);
+        SearchDTOSend search = mapToIngredientList(Objects.requireNonNull(response.getBody()));
+        search.setSearchedTerm(name);
+        return search;
+    }
+
+
 
     public List<Ingredient> getAllIngredients() {
         return (List<Ingredient>) ingredientRepository.findAll();
