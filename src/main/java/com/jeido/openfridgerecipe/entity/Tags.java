@@ -22,7 +22,4 @@ public class Tags {
     private UUID id;
 
     private String name;
-
-    @ManyToMany(mappedBy = "dieteticAlignment")
-    private List<Recipes> labelTags;
 }

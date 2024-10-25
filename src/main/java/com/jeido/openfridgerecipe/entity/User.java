@@ -24,7 +24,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id")
-    private String id;
+    private UUID id;
 
     @NotBlank(message = "This field can't be empty !")
     @Size(min=3, max=15, message = "Name should be between 3 and 15 characters long !")

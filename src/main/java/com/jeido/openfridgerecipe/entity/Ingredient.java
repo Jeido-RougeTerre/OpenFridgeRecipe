@@ -1,12 +1,11 @@
 package com.jeido.openfridgerecipe.entity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 
 @Data
@@ -23,4 +22,13 @@ public class Ingredient {
     private String name;
     private String quantity;
     private double calories;
+
+    @ManyToMany
+    @JoinTable(
+            name = "ingredient_tags",
+            joinColumns = @JoinColumn(name="ingredient_code"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tags> tags;
+
 }

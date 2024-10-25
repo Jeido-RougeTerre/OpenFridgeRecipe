@@ -10,6 +10,6 @@ import java.util.UUID;
 
 public interface RecipesRepository extends CrudRepository<Recipes, UUID> {
     List<Recipes> findByName(String name);
-    List<Recipes> findByDieteticAlignment(Tags tag);
-    List<Recipes> findByIngredients(String ingredientCode);
+    List<Recipes> findByDieteticAlignmentContaining(Tags tag);
+    List<Recipes> findByIngredientsContaining(Ingredient ingredientCode);
 }
