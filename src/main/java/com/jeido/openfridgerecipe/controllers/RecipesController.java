@@ -23,7 +23,7 @@ public class RecipesController {
     private RecipesService recipesService;
 
     @GetMapping
-    public ResponseEntity<List<RecipesDtoSend>> getAllFilm (){
+    public ResponseEntity<List<RecipesDtoSend>> getAllRecipes (){
         return ResponseEntity.ok(recipesService.getAll());
     }
 

@@ -20,7 +20,7 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
     private RecipesRepository recipesRepository;
 
     public Recipes getById (UUID id){
-        return recipesRepository.findById(id).orElseThrow(()->new NotFoundException("film not found at id :"+id));
+        return recipesRepository.findById(id).orElseThrow(()->new NotFoundException("Recipe not found at id :"+id));
     }
 
     @Override
