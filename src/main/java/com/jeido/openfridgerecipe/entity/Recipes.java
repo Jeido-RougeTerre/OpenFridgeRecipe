@@ -28,7 +28,11 @@ public class Recipes {
     private int CutleryNb;
     private long CaloricNb;
 
-//    private List<String> ingredientsList;
+    @ManyToMany
+    @JoinTable(name = "recipes_ingredients",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_code"))
+    private List<Ingredient> ingredients;
 
     @ManyToMany
     @JoinTable(name = "recipes_tags",
