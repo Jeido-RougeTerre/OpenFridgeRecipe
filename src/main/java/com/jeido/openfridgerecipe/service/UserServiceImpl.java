@@ -1,7 +1,6 @@
 package com.jeido.openfridgerecipe.service;
 
-import com.jeido.openfridgerecipe.entity.Ingredient;
-import com.jeido.openfridgerecipe.entity.Recette;
+import com.jeido.openfridgerecipe.entity.Recipes;
 import com.jeido.openfridgerecipe.entity.User;
 import com.jeido.openfridgerecipe.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,17 +59,17 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    public void addFavoriteRecipe(UUID userId, Recette recipe) {
+    public void addFavoriteRecipe(UUID userId, Recipes recipe) {
         User user = getUserById(userId);
         user.addFavoriteRecipe(recipe);
         userRepository.save(user);
     }
 
-    public void addDieteticIngredient(UUID userId, Ingredient ingredient) {
-        User user = getUserById(userId);
-        user.addDieteticAlignement(Ingredient);
-        userRepository.save(user);
-    }
+//    public void addDieteticIngredient(UUID userId, Ingredient ingredient) {
+//        User user = getUserById(userId);
+//        user.addDieteticAlignement(Ingredient);
+//        userRepository.save(user);
+//    }
 
 
 }

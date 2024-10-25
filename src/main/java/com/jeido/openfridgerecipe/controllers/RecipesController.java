@@ -37,7 +37,18 @@ public class RecipesController {
         List<Recipes> recipesList = recipesService.getByTags(tag);
         List<RecipesDtoSend> recipesDtoSends = new ArrayList<>();
         for (Recipes recipe : recipesList){
-            recipesDtoSends.add(new RecipesDtoSend(recipe.getId(),recipe.getName(),recipe.getCutleryNb(),recipe.getCaloricNb(),recipe.getDieteticAlignment()));//,recipe.getIngredientsList(),recipe.getDieteticAlignment()));
+            recipesDtoSends.add(new RecipesDtoSend(recipe.getId(),recipe.getName(),recipe.getCutleryNb(),recipe.getCaloricNb(), recipe.getIngredients(), recipe.getDieteticAlignment()));
+        }
+
+        return ResponseEntity.ok(recipesDtoSends);
+    }
+
+    @GetMapping("{ingredientCode}")
+    public ResponseEntity<List<RecipesDtoSend>> getRecipeByIngredientCode(@PathVariable("ingredientCode") String code){
+        List<Recipes> recipesList = recipesService.getByIngredientCode(code);
+        List<RecipesDtoSend> recipesDtoSends = new ArrayList<>();
+        for (Recipes recipe : recipesList){
+            recipesDtoSends.add(new RecipesDtoSend(recipe.getId(),recipe.getName(),recipe.getCutleryNb(),recipe.getCaloricNb(), recipe.getIngredients(), recipe.getDieteticAlignment()));
         }
 
         return ResponseEntity.ok(recipesDtoSends);

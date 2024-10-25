@@ -1,7 +1,6 @@
 package com.jeido.openfridgerecipe.service;
 
-import com.jeido.openfridgerecipe.entity.Ingredient;
-import com.jeido.openfridgerecipe.entity.Recette;
+import com.jeido.openfridgerecipe.entity.Recipes;
 import com.jeido.openfridgerecipe.entity.User;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ public interface UserService {
     void deleteUser(UUID id);
     User getUserByEmail(String email);
 
-    void addFavoriteRecipe(UUID id, Recette recipe);
+    void addFavoriteRecipe(UUID id, Recipes recipe);
 
-    void addDieteticIngredient(UUID id, Ingredient ingredient);
+//    void addDieteticIngredient(UUID id, Ingredient ingredient);
 }

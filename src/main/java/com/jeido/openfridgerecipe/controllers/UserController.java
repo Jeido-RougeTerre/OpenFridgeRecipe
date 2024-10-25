@@ -1,7 +1,6 @@
 package com.jeido.openfridgerecipe.controllers;
 
-import com.jeido.openfridgerecipe.entity.Ingredient;
-import com.jeido.openfridgerecipe.entity.Recette;
+import com.jeido.openfridgerecipe.entity.Recipes;
 import com.jeido.openfridgerecipe.entity.User;
 import com.jeido.openfridgerecipe.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,14 +82,14 @@ public class UserController {
     }
 
     @PostMapping("/{id}/favorite-recipes")
-    public ResponseEntity<User> addFavoriteRecipe(@PathVariable UUID id, @RequestBody Recette recipe) {
+    public ResponseEntity<User> addFavoriteRecipe(@PathVariable UUID id, @RequestBody Recipes recipe) {
         userService.addFavoriteRecipe(id, recipe);
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    @PostMapping("/{id}/dietetic-ingredients")
-    public ResponseEntity<User> addDieteticIngredient(@PathVariable UUID id, @RequestBody Ingredient ingredient) {
-        userService.addDieteticIngredient(id, ingredient);
-        return ResponseEntity.ok(userService.getUserById(id));
-    }
+//    @PostMapping("/{id}/dietetic-ingredients")
+//    public ResponseEntity<User> addDieteticIngredient(@PathVariable UUID id, @RequestBody Ingredient ingredient) {
+//        userService.addDieteticIngredient(id, ingredient);
+//        return ResponseEntity.ok(userService.getUserById(id));
+//    }
 }

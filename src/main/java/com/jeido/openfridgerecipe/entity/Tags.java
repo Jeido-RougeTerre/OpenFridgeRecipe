@@ -21,6 +21,8 @@ public class Tags {
     @Column(name = "tag_id")
     private UUID id;
 
+    private String name;
+
     @ManyToMany(mappedBy = "dieteticAlignment")
     private List<Recipes> labelTags;
 }

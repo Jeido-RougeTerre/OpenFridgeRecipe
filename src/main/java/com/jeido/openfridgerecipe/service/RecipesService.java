@@ -32,6 +32,10 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
         return recipesRepository.findByDieteticAlignment(tags);
     }
 
+    public List<Recipes> getByIngredientCode (String ingredientCode) {
+        return recipesRepository.findByIngredients(ingredientCode);
+    }
+
     @Override
     public RecipesDtoSend create (RecipesDtoReceive recipesDtoReceive){
         Recipes recipeCreated = Recipes.builder()

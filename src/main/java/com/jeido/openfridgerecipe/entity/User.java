@@ -35,17 +35,17 @@ public class User {
     @Email(message = "Email invalid !")
     private String email;
 
-    @ManyToMany
-    @JoinTable
-            (name = "user_restrictions",
-                    joinColumns = @JoinColumn(name = "user_id"))
-    private List<Ingredient> ingredientsDietetique;
+//    @ManyToMany
+//    @JoinTable
+//            (name = "user_restrictions",
+//                    joinColumns = @JoinColumn(name = "user_id"))
+//    private List<Ingredient> ingredientsDietetique;
 
     @ManyToMany
     @JoinTable(
             name = "user_favorite_recipes",
             joinColumns = @JoinColumn(name = "user_id"))
-    private List<Recette> recettesFav;
+    private List<Recipes> recettesFav;
 
     @Column(columnDefinition = "boolean default false")
     private boolean isAdmin;
@@ -53,15 +53,15 @@ public class User {
     @NotBlank(message = "Password can't be empty!")
     private String password;
 
-    public void addFavoriteRecipe(Recette recipe) {
+    public void addFavoriteRecipe(Recipes recipe) {
         if (!this.recettesFav.contains(recipe)) {
             this.recettesFav.add(recipe);
         }
     }
 
-    public void addDieteticAlignement(Ingredient ingredient) {
-        if (!this.ingredientsDietetique.contains(ingredient)) {
-            this.ingredientsDietetique.add(ingredient);
-        }
-    }
+//    public void addDieteticAlignement(Ingredient ingredient) {
+//        if (!this.ingredientsDietetique.contains(ingredient)) {
+//            this.ingredientsDietetique.add(ingredient);
+//        }
+//    }
 }
