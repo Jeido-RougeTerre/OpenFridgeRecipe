@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +24,7 @@ public class Recipes {
 
     private String name;
 
+
     private int CutleryNb;
     private long CaloricNb;
 
@@ -33,4 +35,7 @@ public class Recipes {
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tags> dieteticAlignment;
+
+    @ManyToMany(mappedBy = "recettesFav")
+    private List<User> users = new ArrayList<>();
 }
