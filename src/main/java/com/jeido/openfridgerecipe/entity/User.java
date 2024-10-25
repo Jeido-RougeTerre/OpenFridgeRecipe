@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -35,13 +37,18 @@ public class User {
     @Email(message = "Email invalid !")
     private String email;
 
-
+    @ManyToMany
+    @JoinTable
+            (name = "user_restrictions",
+                    joinColumns = @JoinColumn(name = "user_id"))
+    private List<Tags> ingredientsDietetique;
 
     @ManyToMany
     @JoinTable(
             name = "user_favorite_recipes",
-            joinColumns = @JoinColumn(name = "user_id"))
-    private List<Recette> recettesFav;
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "recipe_id"))
+    private List<Recipes> recettesFav = new ArrayList<>();
 
     @Column(columnDefinition = "boolean default false")
     private boolean isAdmin;
@@ -49,15 +56,15 @@ public class User {
     @NotBlank(message = "Password can't be empty!")
     private String password;
 
-    public void addFavoriteRecipe(Recette recipe) {
+    public void addFavoriteRecipe(Recipes recipe) {
         if (!this.recettesFav.contains(recipe)) {
             this.recettesFav.add(recipe);
         }
     }
 
-    public void addDieteticAlignement(Ingredient ingredient) {
-        if (!this.ingredientsDietetique.contains(ingredient)) {
-            this.ingredientsDietetique.add(ingredient);
+    public void addDieteticAlignement(Tags tag) {
+        if (!this.ingredientsDietetique.contains(tag)) {
+            this.ingredientsDietetique.add(tag);
         }
     }
 }
