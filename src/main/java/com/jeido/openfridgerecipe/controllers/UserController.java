@@ -1,9 +1,13 @@
 package com.jeido.openfridgerecipe.controllers;
 
+import com.jeido.openfridgerecipe.entity.Ingredient;
 import com.jeido.openfridgerecipe.entity.Recipes;
+import com.jeido.openfridgerecipe.entity.Tags;
 import com.jeido.openfridgerecipe.entity.User;
 import com.jeido.openfridgerecipe.service.UserService;
+import org.hibernate.id.factory.internal.TableGenerationTypeStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.metrics.StartupStep;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -12,6 +16,8 @@ import org.springframework.validation.BindingResult;
 import java.util.List;
 import java.util.UUID;
 import jakarta.validation.Valid;
+
+import static org.yaml.snakeyaml.tokens.Token.ID.Tag;
 
 @RestController
 @RequestMapping("/api/users")
@@ -87,9 +93,9 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-//    @PostMapping("/{id}/dietetic-ingredients")
-//    public ResponseEntity<User> addDieteticIngredient(@PathVariable UUID id, @RequestBody Ingredient ingredient) {
-//        userService.addDieteticIngredient(id, ingredient);
-//        return ResponseEntity.ok(userService.getUserById(id));
-//    }
+    @PostMapping("/{id}/dietetic-ingredients")
+    public ResponseEntity<User> addDieteticIngredient(@PathVariable UUID id, @RequestBody Tags tag) {
+        userService.addDieteticIngredient(id,tag);
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
 }
