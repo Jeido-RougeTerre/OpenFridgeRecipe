@@ -5,7 +5,6 @@ import com.jeido.openfridgerecipe.entity.Fridge;
 import com.jeido.openfridgerecipe.entity.Recipes;
 import com.jeido.openfridgerecipe.entity.User;
 import com.jeido.openfridgerecipe.repository.FridgeRepository;
-import com.jeido.openfridgerecipe.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,14 +14,12 @@ import java.util.List;
 public class FridgeService {
 
     private final FridgeRepository fridgeRepository;
-    private final UserRepository userRepository;
-    private final RecipesService recipesService;
+
 
     @Autowired
-    public FridgeService(FridgeRepository fridgeRepository, UserRepository userRepository, RecipesService recipesService) {
+    public FridgeService(FridgeRepository fridgeRepository) {
         this.fridgeRepository = fridgeRepository;
-        this.userRepository = userRepository;
-        this.recipesService = recipesService;
+
     }
 
     public Fridge getFridgeByUserId(Long userId) {
@@ -64,4 +61,12 @@ public class FridgeService {
         return fridge.getContenu();
     }
 
+    public List<Recipes> getSuggestedRecipes(Long userId) {
+        Fridge fridge = fridgeRepository.findByUser_Id(userId)
+                .orElseThrow(() -> new RuntimeException("Fridge not found for user id: " + userId));
+
+        List<Ingredient> ingredients = fridge.getContenu();
+
+        return RecipesService.suggestRecipesByIngredients(ingredients);
+    }
 }

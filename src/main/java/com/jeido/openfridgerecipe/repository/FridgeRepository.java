@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public abstract class FridgeRepository implements CrudRepository<Fridge, Long> {
+public interface FridgeRepository extends CrudRepository<Fridge, Long> {
 
-    public abstract Optional<Fridge> findByUser_Id(Long userId);
+    Optional<Fridge> findByUser_Id(Long userId);
 }
