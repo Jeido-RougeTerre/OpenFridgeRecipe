@@ -35,11 +35,7 @@ public class User {
     @Email(message = "Email invalid !")
     private String email;
 
-    @ManyToMany
-    @JoinTable
-            (name = "user_restrictions",
-                    joinColumns = @JoinColumn(name = "user_id"))
-    private List<Ingredient> ingredientsDietetique;
+
 
     @ManyToMany
     @JoinTable(

@@ -1,4 +1,4 @@
-package com.jeido.openfridgerecipe.service;
+package com.jeido.openfridgerecipe.service.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -14,4 +14,10 @@ public class Product {
 
     @JsonProperty("nutriments")
     private Nutriment nutriments;
+
+    @JsonProperty("allergens_tags")
+    private String[] allergensTags;
+
+    @JsonProperty("labels_tags")
+    private String[] labelsTags;
 }

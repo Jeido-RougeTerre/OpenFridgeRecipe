@@ -14,4 +14,5 @@ public class Ingredient {
     private String name;
     private String quantity;
     private double calories;
+    private String[] tags;
 }

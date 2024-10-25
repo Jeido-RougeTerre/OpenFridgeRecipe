@@ -1,4 +1,4 @@
-package com.jeido.openfridgerecipe.service;
+package com.jeido.openfridgerecipe.service.json;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
