@@ -32,12 +32,12 @@ public class IngredientAPIController {
 
     @GetMapping("/search/{terms}")
     public ResponseEntity<SearchDTOSend> getIngredientsByTerms(@PathVariable("terms") String terms) {
-        return ResponseEntity.ok(ingredientService.getIngredientsbyName(terms));
+        return ResponseEntity.ok(ingredientService.getIngredientsByName(terms));
     }
 
     @GetMapping("/search/{terms}/{page}")
     public ResponseEntity<SearchDTOSend> getIngredientsByTerms(@PathVariable("terms") String terms, @PathVariable("page") int page) {
-        return ResponseEntity.ok(ingredientService.getIngredientsbyName(terms,page));
+        return ResponseEntity.ok(ingredientService.getIngredientsByName(terms,page));
     }
 
 }

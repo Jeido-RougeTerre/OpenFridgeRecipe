@@ -100,12 +100,12 @@ public class IngredientService {
         return ing;
     }
 
-    public SearchDTOSend getIngredientsbyName(String name) {
-        return getIngredientsbyName(name, 1);
+    public SearchDTOSend getIngredientsByName(String name) {
+        return getIngredientsByName(name, 1);
     }
 
 
-    public SearchDTOSend getIngredientsbyName(String name, int page) {
+    public SearchDTOSend getIngredientsByName(String name, int page) {
         final String uri = PRE_API_URI_SEARCH + name + "&page=" + page + POST_API_URI_SEARCH;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<IngredientSearchAPIResponse> response = restTemplate.getForEntity(uri, IngredientSearchAPIResponse.class);
