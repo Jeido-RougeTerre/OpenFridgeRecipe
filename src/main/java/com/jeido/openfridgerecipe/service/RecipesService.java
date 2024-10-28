@@ -4,9 +4,8 @@ import com.jeido.openfridgerecipe.dto.RecipesDtoReceive;
 import com.jeido.openfridgerecipe.dto.RecipesDtoSend;
 import com.jeido.openfridgerecipe.entity.Ingredient;
 import com.jeido.openfridgerecipe.entity.Recipes;
-import com.jeido.openfridgerecipe.entity.Tags;
+import com.jeido.openfridgerecipe.entity.Tag;
 import com.jeido.openfridgerecipe.exception.NotFoundException;
-import com.jeido.openfridgerecipe.repository.IngredientRepository;
 import com.jeido.openfridgerecipe.repository.RecipesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
         return recipeToRecipeDtoSend(getById(id));
     }
 
-    public List<Recipes> getByTags (Tags tags) {
+    public List<Recipes> getByTags (Tag tags) {
         return recipesRepository.findByDieteticAlignmentContaining(tags);
     }
 

@@ -38,7 +38,7 @@ public class Recipes {
     @JoinTable(name = "recipes_tags",
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private List<Tags> dieteticAlignment;
+    private List<Tag> dieteticAlignment;
 
     @ManyToMany(mappedBy = "recettesFav")
     private List<User> users = new ArrayList<>();

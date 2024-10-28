@@ -29,6 +29,6 @@ public class Ingredient {
             joinColumns = @JoinColumn(name="ingredient_code"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private List<Tags> tags;
+    private List<Tag> tags;
 
 }
