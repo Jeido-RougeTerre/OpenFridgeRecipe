@@ -2,25 +2,29 @@ package com.jeido.openfridgerecipe.service;
 
 import com.jeido.openfridgerecipe.entity.*;
 import com.jeido.openfridgerecipe.repository.FridgeRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.UUID;
 import java.util.List;
+
 
 @Service
 public class FridgeService {
 
     private final FridgeRepository fridgeRepository;
+    private final UserService userservice;
 
 
     @Autowired
-    public FridgeService(FridgeRepository fridgeRepository) {
+    public FridgeService(FridgeRepository fridgeRepository, UserService uservice) {
         this.fridgeRepository = fridgeRepository;
+        this.userservice = uservice;
 
     }
 
-    public Fridge getFridgeByUserId(Long userId) {
-        return fridgeRepository.findByUser_Id(userId).orElseThrow(() -> new RuntimeException("Fridge not found for this User"));
+    public Fridge getFridgeByUserId(UUID userId) {
+        return fridgeRepository.findByUser(userservice.getUserById(userId)).orElseThrow(() -> new RuntimeException("Fridge not found for this User"));
     }
 
     public Fridge addIngredientToFridge(Long fridgeId, List<Ingredient> ingredients) {
@@ -49,8 +53,8 @@ public class FridgeService {
         return fridge.getContenu();
     }
 
-    public List<Recipes> getSuggestedRecipes(Long userId) {
-        Fridge fridge = fridgeRepository.findByUser_Id(userId)
+    public List<Recipes> getSuggestedRecipes(UUID userId) {
+        Fridge fridge = fridgeRepository.findByUser(userservice.getUserById(userId))
                 .orElseThrow(() -> new RuntimeException("Fridge not found for user id: " + userId));
 
         List<Ingredient> ingredients = fridge.getContenu();
@@ -58,28 +62,27 @@ public class FridgeService {
         return RecipesService.suggestRecipesByIngredients(ingredients);
     }
 
-    public List<Ingredient> getIngredientsByFridge(Long userId) {
+    public List<Ingredient> getIngredientsByFridge(UUID userId) {
         Fridge fridge = getFridgeByUserId(userId);
         return fridge.getContenu();
     }
 
-    public List<Tags> getTagsByFridge(Long userId) {
+    public List<Tag> getTagsByFridge(UUID userId) {
         Fridge fridge = getFridgeByUserId(userId);
         return fridge.getTags();
     }
 
-    public List<Recipes> getSuggestedRecipesByIngredients(Long userId) {
-        Fridge fridge = fridgeRepository.findByUser_Id(userId)
+    public List<Recipes> getSuggestedRecipesByIngredients(UUID userId) {
+        Fridge fridge = fridgeRepository.findByUser(userservice.getUserById(userId))
                 .orElseThrow(() -> new RuntimeException("Fridge not found for user id: " + userId));
         List<Ingredient> ingredients = fridge.getContenu();
         return RecipesService.suggestRecipesByIngredients(ingredients);
     }
 
-    public List<Recipes> getSuggestedRecipesByTags(Long userId) {
-        Fridge fridge = fridgeRepository.findByUser_Id(userId)
+    public List<Recipes> getSuggestedRecipesByTags(UUID userId) {
+        Fridge fridge = fridgeRepository.findByUser(userservice.getUserById(userId))
                 .orElseThrow(() -> new RuntimeException("Fridge not found for user id: " + userId));
-        List<Tags> tags = fridge.getTags();
+        List<Tag> tags = fridge.getTags();
         return RecipesService.suggestRecipesByTag(tags);
     }
 }
-

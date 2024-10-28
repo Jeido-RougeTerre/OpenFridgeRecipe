@@ -1,7 +1,7 @@
 package com.jeido.openfridgerecipe.service;
 
 import com.jeido.openfridgerecipe.repository.TagsRepository;
-import com.jeido.openfridgerecipe.entity.Tags;
+import com.jeido.openfridgerecipe.entity.Tag;
 import com.jeido.openfridgerecipe.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,11 +11,11 @@ public class TagService {
 
     private final TagsRepository tagsRepository;
 
-    public Tags parseOrCreate(String name) {
+    public Tag parseOrCreate(String name) {
         if (tagsRepository.existsTagsByName(name)) {
             return findByName(name);
         }
-        return create(Tags.builder().name(name).build());
+        return create(Tag.builder().name(name).build());
     }
 
     @Autowired
@@ -23,21 +23,21 @@ public class TagService {
         this.tagsRepository = tagsRepository;
     }
 
-    public Tags create(Tags tags) {
+    public Tag create(Tag tags) {
         if (tagsRepository.existsTagsByName(tags.getName())) return null;
         return tagsRepository.save(tags);
     }
 
-    public Tags findByName(String str) {
+    public Tag findByName(String str) {
         return tagsRepository.findByName(str).orElseThrow(() -> new NotFoundException("Tag not found with name " + str));
     }
 
-    public Tags update(Tags tags) {
+    public Tag update(Tag tags) {
         if (!tagsRepository.existsTagsByName(tags.getName())) return null;
         return tagsRepository.save(tags);
     }
 
-    public boolean delete(Tags tags) {
+    public boolean delete(Tag tags) {
         if (!tagsRepository.existsTagsByName(tags.getName())) return false;
         tagsRepository.delete(tags);
         return true;

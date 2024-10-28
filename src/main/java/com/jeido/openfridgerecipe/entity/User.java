@@ -41,7 +41,7 @@ public class User {
     @JoinTable
             (name = "user_restrictions",
                     joinColumns = @JoinColumn(name = "user_id"))
-    private List<Tags> ingredientsDietetique;
+    private List<Tag> ingredientsDietetique;
 
     @ManyToMany
     @JoinTable(
@@ -49,6 +49,13 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "recipe_id"))
     private List<Recipes> recettesFav = new ArrayList<>();
+
+    @OneToOne
+    @JoinTable(
+            name= "fridge"
+
+    )
+    private Fridge fridge;
 
     @Column(columnDefinition = "boolean default false")
     private boolean isAdmin;
@@ -62,7 +69,7 @@ public class User {
         }
     }
 
-    public void addDieteticAlignement(Tags tag) {
+    public void addDieteticAlignement(Tag tag) {
         if (!this.ingredientsDietetique.contains(tag)) {
             this.ingredientsDietetique.add(tag);
         }

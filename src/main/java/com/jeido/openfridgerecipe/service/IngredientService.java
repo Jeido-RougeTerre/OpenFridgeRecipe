@@ -2,7 +2,7 @@ package com.jeido.openfridgerecipe.service;
 
 import com.jeido.openfridgerecipe.repository.IngredientRepository;
 import com.jeido.openfridgerecipe.entity.Ingredient;
-import com.jeido.openfridgerecipe.entity.Tags;
+import com.jeido.openfridgerecipe.entity.Tag;
 import com.jeido.openfridgerecipe.service.json.IngredientAPIResponse;
 import com.jeido.openfridgerecipe.service.json.Product;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +38,7 @@ public class IngredientService {
             tagNames.addAll(Arrays.stream(p.getLabelsTags()).toList());
         }
 
-        List<Tags> tagList = new ArrayList<>();
+        List<Tag> tagList = new ArrayList<>();
 
         for (String tag : tagNames) {
             tagList.add(tagService.parseOrCreate(tag));
