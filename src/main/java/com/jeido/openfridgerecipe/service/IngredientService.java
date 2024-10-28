@@ -139,6 +139,33 @@ public class IngredientService {
         return findByTags(tagList);
     }
 
+    public List<Ingredient> findByCalories(double calories) {
+        return ingredientRepository.findByCalories(calories);
+    }
+
+    public List<Ingredient> findByCalories(double caloriesMin, double caloriesMax) {
+        if (caloriesMin > caloriesMax) {
+            double temp = caloriesMax;
+            caloriesMax = caloriesMin;
+            caloriesMin = temp;
+        }
+
+        if (caloriesMin == 0 && caloriesMax == 0) {
+            return findByCalories(0);
+        }
+
+        if (caloriesMin == 0) {
+            return ingredientRepository.findByCaloriesLessThan(caloriesMax);
+        }
+
+        if (caloriesMax == 0) {
+            return ingredientRepository.findByCaloriesGreaterThan(caloriesMin);
+        }
+
+        return ingredientRepository.findByCaloriesBetween(caloriesMin, caloriesMax);
+
+    }
+
 
 
 }
