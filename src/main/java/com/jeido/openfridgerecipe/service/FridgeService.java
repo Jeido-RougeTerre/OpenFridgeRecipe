@@ -1,9 +1,6 @@
 package com.jeido.openfridgerecipe.service;
 
-import com.jeido.openfridgerecipe.entity.Ingredient;
-import com.jeido.openfridgerecipe.entity.Fridge;
-import com.jeido.openfridgerecipe.entity.Recipes;
-import com.jeido.openfridgerecipe.entity.User;
+import com.jeido.openfridgerecipe.entity.*;
 import com.jeido.openfridgerecipe.repository.FridgeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,5 +65,15 @@ public class FridgeService {
         List<Ingredient> ingredients = fridge.getContenu();
 
         return RecipesService.suggestRecipesByIngredients(ingredients);
+    }
+
+    public List<Ingredient> getIngredientsByFridge(Long userId) {
+        Fridge fridge = getFridgeByUserId(userId);
+        return fridge.getContenu();
+    }
+
+    public List<Tags> getTagsByFridge(Long userId) {
+        Fridge fridge = getFridgeByUserId(userId);
+        return fridge.getTags();
     }
 }

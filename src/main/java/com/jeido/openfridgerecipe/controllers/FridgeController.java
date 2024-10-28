@@ -1,9 +1,6 @@
 package com.jeido.openfridgerecipe.controllers;
 
-import com.jeido.openfridgerecipe.entity.Ingredient;
-import com.jeido.openfridgerecipe.entity.Recipes;
-import com.jeido.openfridgerecipe.entity.Tags;
-import com.jeido.openfridgerecipe.entity.User;
+import com.jeido.openfridgerecipe.entity.*;
 import com.jeido.openfridgerecipe.service.FridgeService;
 import com.jeido.openfridgerecipe.service.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,4 +30,25 @@ public class FridgeController {
         List<Recipes> suggestedRecipes = fridgeService.getSuggestedRecipes(userId);
         return ResponseEntity.ok(suggestedRecipes);
     }
+
+    @GetMapping("/{userId}/ingredients")
+    public ResponseEntity<List<Ingredient>> getIngredientByFridge(@PathVariable Long userId) {
+        List<Ingredient> ingredients = fridgeService.getIngredientsByFridge(userId);
+        return ResponseEntity.ok(ingredients);
+    }
+
+    @GetMapping("/{userId}/tags")
+    public ResponseEntity<List<Tags>> getTagByFridge(@PathVariable Long userId) {
+        List<Tags> tags = fridgeService.getTagsByFridge(userId);
+        return ResponseEntity.ok(tags);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<Fridge> getFridge(@PathVariable Long userId) {
+        Fridge fridge = fridgeService.getFridgeByUserId(userId);
+        return ResponseEntity.ok(fridge);
+    }
+
 }
+
+
