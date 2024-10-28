@@ -12,4 +12,5 @@ public interface RecipesRepository extends CrudRepository<Recipes, UUID> {
     List<Recipes> findByName(String name);
     List<Recipes> findByDieteticAlignmentContaining(Tags tag);
     List<Recipes> findByIngredientsContaining(Ingredient ingredientCode);
+    List<Recipes> findByIngredientsIn(List<Ingredient> ingredients);
 }

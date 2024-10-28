@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDtoSend> {
 
     @Autowired
-    private RecipesRepository recipesRepository;
+    private static RecipesRepository recipesRepository;
     @Autowired
     private IngredientService ingredientService;
 
@@ -93,6 +93,10 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
 
     private List<RecipesDtoSend> recipesToRecipeDtoSends (List<Recipes> recipes){
         return recipes.stream().map(this::recipeToRecipeDtoSend).collect(Collectors.toList());
+    }
+
+    public static List<Recipes> suggestRecipesByIngredients(List<Ingredient> ingredients) {
+        return recipesRepository.findByIngredientsIn(ingredients);
     }
 
 }
