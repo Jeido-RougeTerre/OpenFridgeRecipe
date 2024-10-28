@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/ingredient/")
@@ -38,6 +41,12 @@ public class IngredientAPIController {
     @GetMapping("/search/{terms}/{page}")
     public ResponseEntity<SearchDTOSend> getIngredientsByTerms(@PathVariable("terms") String terms, @PathVariable("page") int page) {
         return ResponseEntity.ok(ingredientService.getIngredientsByName(terms,page));
+    }
+
+    @GetMapping("/tags/{tags}")
+    public ResponseEntity<List<Ingredient>> getIngredientsByTags(@PathVariable("tags") String tags) {
+        String[] str = tags.split(",");
+        return ResponseEntity.ok(ingredientService.findByTagsName(Arrays.stream(str).toList()));
     }
 
 }

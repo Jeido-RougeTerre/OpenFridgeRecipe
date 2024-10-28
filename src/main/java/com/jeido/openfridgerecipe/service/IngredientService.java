@@ -3,7 +3,7 @@ package com.jeido.openfridgerecipe.service;
 import com.jeido.openfridgerecipe.dto.SearchDTOSend;
 import com.jeido.openfridgerecipe.repository.IngredientRepository;
 import com.jeido.openfridgerecipe.entity.Ingredient;
-import com.jeido.openfridgerecipe.entity.Tags;
+import com.jeido.openfridgerecipe.entity.Tag;
 import com.jeido.openfridgerecipe.service.json.IngredientAPIResponse;
 import com.jeido.openfridgerecipe.service.json.IngredientSearchAPIResponse;
 import com.jeido.openfridgerecipe.service.json.Product;
@@ -45,7 +45,7 @@ public class IngredientService {
             tagNames.addAll(Arrays.stream(p.getLabelsTags()).toList());
         }
 
-        List<Tags> tagList = new ArrayList<>();
+        List<Tag> tagList = new ArrayList<>();
 
         for (String tag : tagNames) {
             tagList.add(tagService.parseOrCreate(tag));
@@ -122,6 +122,21 @@ public class IngredientService {
         if (!ingredientRepository.existsById(code)) return false;
         ingredientRepository.deleteById(code);
         return true;
+    }
+
+    public List<Ingredient> findByTags(List<Tag> tags) {
+        return ingredientRepository.findByTags(tags);
+    }
+
+    public List<Ingredient> findByTagsName(List<String> tags) {
+        List<Tag> tagList = new ArrayList<>();
+        for (String tag : tags) {
+            if (tagService.existByName(tag)) {
+                tagList.add(tagService.findByName(tag));
+            }
+        }
+
+        return findByTags(tagList);
     }
 
 

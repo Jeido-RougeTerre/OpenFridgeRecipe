@@ -3,7 +3,7 @@ package com.jeido.openfridgerecipe.controllers;
 import com.jeido.openfridgerecipe.dto.RecipesDtoReceive;
 import com.jeido.openfridgerecipe.dto.RecipesDtoSend;
 import com.jeido.openfridgerecipe.entity.Recipes;
-import com.jeido.openfridgerecipe.entity.Tags;
+import com.jeido.openfridgerecipe.entity.Tag;
 import com.jeido.openfridgerecipe.service.RecipesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +33,7 @@ public class RecipesController {
     }
 
     @GetMapping("{tags}")
-    public ResponseEntity<List<RecipesDtoSend>> getRecipeByTag(@PathVariable("tags") Tags tag){
+    public ResponseEntity<List<RecipesDtoSend>> getRecipeByTag(@PathVariable("tags") Tag tag){
         List<Recipes> recipesList = recipesService.getByTags(tag);
         List<RecipesDtoSend> recipesDtoSends = new ArrayList<>();
         for (Recipes recipe : recipesList){

@@ -41,7 +41,7 @@ public class User {
     @JoinTable
             (name = "user_restrictions",
                     joinColumns = @JoinColumn(name = "user_id"))
-    private List<Tags> ingredientsDietetique;
+    private List<Tag> ingredientsDietetique;
 
     @ManyToMany
     @JoinTable(
@@ -62,7 +62,7 @@ public class User {
         }
     }
 
-    public void addDieteticAlignement(Tags tag) {
+    public void addDieteticAlignement(Tag tag) {
         if (!this.ingredientsDietetique.contains(tag)) {
             this.ingredientsDietetique.add(tag);
         }

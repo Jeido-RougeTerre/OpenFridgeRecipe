@@ -1,6 +1,7 @@
 package com.jeido.openfridgerecipe.service;
 
 import com.jeido.openfridgerecipe.entity.Recipes;
+import com.jeido.openfridgerecipe.entity.Tag;
 import com.jeido.openfridgerecipe.entity.User;
 import com.jeido.openfridgerecipe.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private com.jeido.openfridgerecipe.entity.Ingredient Ingredient;
-    private com.jeido.openfridgerecipe.entity.Tags Tags;
+    private Tag Tags;
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -71,7 +72,7 @@ public class UserService {
     }
 
     
-    public void addDieteticIngredient(UUID userId, com.jeido.openfridgerecipe.entity.Tags tag){
+    public void addDieteticIngredient(UUID userId, Tag tag){
         User user = getUserById(userId);
         if (!user.getIngredientsDietetique().contains(tag)) {
             user.getIngredientsDietetique().add(tag);

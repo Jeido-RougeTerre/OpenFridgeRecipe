@@ -1,7 +1,7 @@
 package com.jeido.openfridgerecipe.dto;
 
 import com.jeido.openfridgerecipe.entity.Ingredient;
-import com.jeido.openfridgerecipe.entity.Tags;
+import com.jeido.openfridgerecipe.entity.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +18,5 @@ public class RecipesDtoReceive {
     private int CutleryNb;
     private long CaloricNb;
     private List<Ingredient> ingredients;
-    private List<Tags> dieteticAlignment;
+    private List<Tag> dieteticAlignment;
 }
