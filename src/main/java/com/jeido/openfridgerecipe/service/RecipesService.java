@@ -19,9 +19,16 @@ import java.util.stream.Collectors;
 public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDtoSend> {
 
     @Autowired
-    private static RecipesRepository recipesRepository;
+    private RecipesRepository recipesRepository;
     @Autowired
     private IngredientService ingredientService;
+
+    @Autowired
+    public RecipesService(RecipesRepository recipesRepository, IngredientService ingredientService) {
+        this.recipesRepository = recipesRepository;
+        this.ingredientService = ingredientService;
+    }
+
 
     public Recipes getById (UUID id){
         return recipesRepository.findById(id).orElseThrow(()->new NotFoundException("Recipe not found at id :"+id));
@@ -96,7 +103,11 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
     }
 
     public static List<Recipes> suggestRecipesByIngredients(List<Ingredient> ingredients) {
-        return recipesRepository.findByIngredientsIn(ingredients);
+        return RecipesRepository.findByIngredientsIn(ingredients);
+    }
+
+    public static List<Recipes> suggestRecipesByTag(List<Tags> tags) {
+        return RecipesRepository.findByDieteticAlignmentIn(tags);
     }
 
 }

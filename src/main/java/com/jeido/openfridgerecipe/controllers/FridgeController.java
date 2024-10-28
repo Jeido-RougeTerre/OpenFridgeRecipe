@@ -49,6 +49,30 @@ public class FridgeController {
         return ResponseEntity.ok(fridge);
     }
 
+    @GetMapping("/{userId}/suggested-recipes/ingredients")
+    public ResponseEntity<List<Recipes>> getSuggestedRecipesByIngredients(@PathVariable Long userId) {
+        List<Recipes> suggestedRecipes = fridgeService.getSuggestedRecipesByIngredients(userId);
+        return ResponseEntity.ok(suggestedRecipes);
+    }
+
+    @GetMapping("/{userId}/suggested-recipes/tags")
+    public ResponseEntity<List<Recipes>> getSuggestedRecipesByTags(@PathVariable Long userId) {
+        List<Recipes> suggestedRecipes = fridgeService.getSuggestedRecipesByTags(userId);
+        return ResponseEntity.ok(suggestedRecipes);
+    }
+
+    @PostMapping("/{fridgeId}/ingredients")
+    public ResponseEntity<List<Ingredient>> addIngredientsToFridge(@PathVariable Long fridgeId, @RequestBody List<Ingredient> ingredients) {
+        List<Ingredient> updatedIngredients = (List<Ingredient>) fridgeService.addIngredientToFridge(fridgeId, ingredients);
+        return ResponseEntity.ok(updatedIngredients);
+    }
+
+    @DeleteMapping("/{fridgeId}/ingredients")
+    public ResponseEntity<List<Ingredient>> removeIngredientsFromFridge(@PathVariable Long fridgeId, @RequestBody List<Ingredient> ingredients) {
+        List<Ingredient> updatedIngredients = fridgeService.removeIngredientsFromFridge(fridgeId, ingredients);
+        return ResponseEntity.ok(updatedIngredients);
+    }
+
 }
 
 
