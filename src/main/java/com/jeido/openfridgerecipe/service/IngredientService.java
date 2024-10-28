@@ -62,20 +62,23 @@ public class IngredientService {
     private SearchDTOSend mapToIngredientList(IngredientSearchAPIResponse body) {
         List<Ingredient> ingList = new ArrayList<>();
 
+
         for (ProductSearch product : body.getProducts()) {
             ingList.add(getIngredientByCode(product.getId()));
         }
-
         int prevPage = (body.getPage() > 1)? body.getPage() - 1 : 0;
-        int nextPage = 0; //TODO
-
+        int totalPage = (int)Math.ceil((double)body.getCount() / body.getPageSize());
+        int nextPage = (body.getPage() == totalPage)? 0 : body.getPage() + 1;
 
 
         return SearchDTOSend.builder()
                 .count(body.getCount())
                 .page(body.getPage())
                 .prevPage(prevPage)
+                .nextPage(nextPage)
                 .pageSize(body.getPageSize())
+                .pageCount(body.getPageCount())
+                .totalPages(totalPage)
                 .results(ingList)
                 .build();
 
@@ -98,15 +101,18 @@ public class IngredientService {
     }
 
     public SearchDTOSend getIngredientsbyName(String name) {
-        final String uri = PRE_API_URI_SEARCH + name + POST_API_URI_SEARCH;
+        return getIngredientsbyName(name, 1);
+    }
+
+
+    public SearchDTOSend getIngredientsbyName(String name, int page) {
+        final String uri = PRE_API_URI_SEARCH + name + "&page=" + page + POST_API_URI_SEARCH;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<IngredientSearchAPIResponse> response = restTemplate.getForEntity(uri, IngredientSearchAPIResponse.class);
         SearchDTOSend search = mapToIngredientList(Objects.requireNonNull(response.getBody()));
         search.setSearchedTerm(name);
         return search;
     }
-
-
 
     public List<Ingredient> getAllIngredients() {
         return (List<Ingredient>) ingredientRepository.findAll();

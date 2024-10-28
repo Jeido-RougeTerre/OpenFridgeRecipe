@@ -10,12 +10,14 @@ import java.util.List;
 @Builder
 public class SearchDTOSend {
     private String searchedTerm;
-    private int page;
+    private int page; // page actuelle
     private int prevPage;
     private int nextPage;
-    private int pageSize;
-    private int count;
-    private List<Ingredient> results;
+    private int pageSize; //taille de la page
+    private int pageCount; // nb element de la page
+    private int count; // nb de resultat
+    private int totalPages; // nb de page
+    private List<Ingredient> results; //liste des resultat sur la page
 
 
 }
