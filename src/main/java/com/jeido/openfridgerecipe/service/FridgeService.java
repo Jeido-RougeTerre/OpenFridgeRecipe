@@ -4,7 +4,6 @@ package com.jeido.openfridgerecipe.service;
 import com.jeido.openfridgerecipe.entity.*;
 import com.jeido.openfridgerecipe.exception.NotFoundException;
 import com.jeido.openfridgerecipe.repository.FridgeRepository;
-import com.jeido.openfridgerecipe.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,20 +15,17 @@ public class FridgeService {
 
     private final FridgeRepository fridgeRepository;
     private final RecipesService recipesService;
-    private final UserRepository userRepository;
 
 
     @Autowired
-    public FridgeService(FridgeRepository fridgeRepository, RecipesService recipesService, UserRepository userRepository) {
+    public FridgeService(FridgeRepository fridgeRepository, RecipesService recipesService) {
         this.fridgeRepository = fridgeRepository;
 
         this.recipesService = recipesService;
-        this.userRepository = userRepository;
     }
 
     public Fridge getFridgeByUserId(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Could not found user with id #" + userId));
-        return fridgeRepository.findByUser(user).orElseThrow(() -> new NotFoundException("Fridge not found for this User"));
+        return fridgeRepository.findByUserid(userId).orElseThrow(() -> new NotFoundException("Fridge not found for this User"));
     }
 
     public Fridge addIngredientToFridge(Long fridgeId, Ingredient ingredient) {
@@ -57,8 +53,8 @@ public class FridgeService {
         return fridgeRepository.save(fridge);
     }
 
-    public Fridge createFridge(User user, int nbrCouvert) {
-        Fridge fridge = new Fridge(user, nbrCouvert);
+    public Fridge createFridge(UUID userID) {
+        Fridge fridge = Fridge.builder().userid(userID).build();
         return fridgeRepository.save(fridge);
     }
 
@@ -68,8 +64,7 @@ public class FridgeService {
     }
 
     public List<Recipes> getSuggestedRecipes(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
-        Fridge fridge = fridgeRepository.findByUser(user)
+        Fridge fridge = fridgeRepository.findByUserid(userId)
                 .orElseThrow(() -> new NotFoundException("Fridge not found for user id: " + userId));
 
         List<Ingredient> ingredients = fridge.getContenu();

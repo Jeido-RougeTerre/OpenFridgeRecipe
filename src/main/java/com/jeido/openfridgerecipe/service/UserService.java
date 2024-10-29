@@ -3,6 +3,7 @@ package com.jeido.openfridgerecipe.service;
 import com.jeido.openfridgerecipe.dto.UserDtoReceive;
 import com.jeido.openfridgerecipe.dto.UserDtoRegister;
 import com.jeido.openfridgerecipe.dto.UserDtoSend;
+import com.jeido.openfridgerecipe.entity.Fridge;
 import com.jeido.openfridgerecipe.entity.User;
 import com.jeido.openfridgerecipe.exception.NotFoundException;
 import com.jeido.openfridgerecipe.repository.UserRepository;
@@ -18,10 +19,12 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final FridgeService fridgeService;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, FridgeService fridgeService) {
         this.userRepository = userRepository;
+        this.fridgeService = fridgeService;
     }
 
 
@@ -41,8 +44,7 @@ public class UserService {
             throw new RuntimeException("Email already exists!");
         }
 
-
-        return userToSend(userRepository.save(
+        User userCreated = userRepository.save(
                 User.builder()
                         .email(user.getEmail())
                         .name(user.getName())
@@ -50,7 +52,11 @@ public class UserService {
                         .password(user.getPassword())
                         .favoriteRecipe(new ArrayList<>())
                         .build()
-        ));
+        );
+
+        Fridge fridge = fridgeService.createFridge(userCreated.getId());
+        userCreated.setFridgeId(fridge.getId());
+        return userToSend(userRepository.save(userCreated));
     }
 
 
@@ -82,6 +88,7 @@ public class UserService {
                 .email(user.getEmail())
                 .isAdmin(user.isAdmin())
                 .favoriteRecipes(user.getFavoriteRecipe())
+                .fridgeId(user.getFridgeId())
                 .build();
     }
 

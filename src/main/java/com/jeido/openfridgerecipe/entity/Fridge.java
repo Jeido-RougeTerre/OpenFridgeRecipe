@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -18,9 +19,7 @@ public class Fridge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinTable
-    private User user;
+    private UUID userid;
 
     @Getter
     @ManyToMany
@@ -40,12 +39,6 @@ public class Fridge {
     private List<Tag> tags = new ArrayList<>();
 
     private int nbCouvert;
-
-
-    public Fridge(User user, int nbrCouvert) {
-        this.user = user;
-        this.nbCouvert = nbrCouvert;
-    }
 
     public void addIngredient(Ingredient ingredient) {
         if (!contenu.contains(ingredient)) {

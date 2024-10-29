@@ -29,6 +29,8 @@ public class User {
 
     private String email;
 
+    private Long fridgeId;
+
     @ManyToMany
     @JoinTable
             (name = "user_restrictions",
