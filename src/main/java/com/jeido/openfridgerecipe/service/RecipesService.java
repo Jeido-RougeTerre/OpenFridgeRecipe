@@ -117,6 +117,7 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
                 .name(recipes.getName())
                 .cutleryNb(recipes.getCutleryNb())
                 .caloricNb(recipes.getCaloricNb())
+                .ingredients(recipes.getIngredients())
                 .tags(recipes.getDieteticAlignment())
                 .build();
     }

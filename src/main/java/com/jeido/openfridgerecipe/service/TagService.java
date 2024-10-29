@@ -20,16 +20,18 @@ public class TagService {
         List<String> noTags = new ArrayList<>();
         List<Tag> result = new ArrayList<>();
         for (Tag tag : tags) {
+            System.out.println("fond tag : " + tag.getName());
             if (!result.contains(tag) && !noTags.contains(tag.getName())) {
                 String str = tag.getName().split(":")[1];
                 if (str.startsWith("no-")) {
                     noTags.add(str);
                 }
+                System.out.println("added");
                 result.add(tag);
             }
         }
 
-        result.removeIf(tag -> !noTags.contains("no-" + tag.getName().split(":")[1]));
+        result.removeIf(tag -> noTags.contains("no-" + tag.getName().split(":")[1]));
 
         return result;
     }
@@ -37,6 +39,7 @@ public class TagService {
     public List<Tag> computeFromIngredients(List<Ingredient> ingredients) {
         List<Tag> result = new ArrayList<>();
         for (Ingredient ingredient : ingredients) {
+            System.out.println("Found :" + ingredient.getName());
             result.addAll(ingredient.getTags());
         }
 
