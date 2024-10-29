@@ -1,15 +1,52 @@
 package com.jeido.openfridgerecipe.service;
 
+import com.jeido.openfridgerecipe.entity.Ingredient;
+import com.jeido.openfridgerecipe.entity.Recipes;
 import com.jeido.openfridgerecipe.repository.TagRepository;
 import com.jeido.openfridgerecipe.entity.Tag;
 import com.jeido.openfridgerecipe.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class TagService {
 
     private final TagRepository tagsRepository;
+
+    public List<Tag> compute(List<Tag> tags) {
+        List<String> noTags = new ArrayList<>();
+        List<Tag> result = new ArrayList<>();
+        for (Tag tag : tags) {
+            if (!result.contains(tag) && !noTags.contains(tag.getName())) {
+                String str = tag.getName().split(":")[1];
+                if (str.startsWith("no-")) {
+                    noTags.add(str);
+                }
+                result.add(tag);
+            }
+        }
+
+        result.removeIf(tag -> !noTags.contains("no-" + tag.getName().split(":")[1]));
+
+        return result;
+    }
+
+    public List<Tag> computeFromIngredients(List<Ingredient> ingredients) {
+        List<Tag> result = new ArrayList<>();
+        for (Ingredient ingredient : ingredients) {
+            result.addAll(ingredient.getTags());
+        }
+
+        return compute(result);
+    }
+
+    public List<Tag> computeForRecipe(Recipes recipes) {
+        return computeFromIngredients(recipes.getIngredients());
+    }
+
 
     public Tag parseOrCreate(String name) {
         if (tagsRepository.existsTagsByName(name)) {

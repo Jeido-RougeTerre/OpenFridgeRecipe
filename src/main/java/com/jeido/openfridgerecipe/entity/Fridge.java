@@ -37,7 +37,7 @@ public class Fridge {
             joinColumns = @JoinColumn(name = "fridge_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private List<Tags> tags = new ArrayList<>();
+    private List<Tag> tags = new ArrayList<>();
 
     private int nbCouvert;
 

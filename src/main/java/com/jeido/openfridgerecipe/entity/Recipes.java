@@ -25,8 +25,8 @@ public class Recipes {
     private String name;
 
 
-    private int CutleryNb;
-    private long CaloricNb;
+    private int cutleryNb;
+    private double caloricNb;
 
     @ManyToMany
     @JoinTable(name = "recipes_ingredients",

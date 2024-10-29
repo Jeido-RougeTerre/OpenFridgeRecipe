@@ -6,21 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class FridgeService {
 
     private final FridgeRepository fridgeRepository;
+    private final UserService userService;
+    private final RecipesService recipesService;
 
 
     @Autowired
-    public FridgeService(FridgeRepository fridgeRepository) {
+    public FridgeService(FridgeRepository fridgeRepository, UserService userService, RecipesService recipesService) {
         this.fridgeRepository = fridgeRepository;
-
+        this.userService = userService;
+        this.recipesService = recipesService;
     }
 
-    public Fridge getFridgeByUserId(Long userId) {
-        return fridgeRepository.findByUser_Id(userId).orElseThrow(() -> new RuntimeException("Fridge not found for this User"));
+    public Fridge getFridgeByUserId(UUID userId) {
+        return fridgeRepository.findByUser(userService.getUserById(userId)).orElseThrow(() -> new RuntimeException("Fridge not found for this User"));
     }
 
     public Fridge addIngredientToFridge(Long fridgeId, Ingredient ingredient) {
@@ -58,21 +62,21 @@ public class FridgeService {
         return fridge.getContenu();
     }
 
-    public List<Recipes> getSuggestedRecipes(Long userId) {
-        Fridge fridge = fridgeRepository.findByUser_Id(userId)
+    public List<Recipes> getSuggestedRecipes(UUID userId) {
+        Fridge fridge = fridgeRepository.findByUser(userService.getUserById(userId))
                 .orElseThrow(() -> new RuntimeException("Fridge not found for user id: " + userId));
 
         List<Ingredient> ingredients = fridge.getContenu();
 
-        return RecipesService.suggestRecipesByIngredients(ingredients);
+        return recipesService.suggestRecipesByIngredients(ingredients);
     }
 
-    public List<Ingredient> getIngredientsByFridge(Long userId) {
+    public List<Ingredient> getIngredientsByFridge(UUID userId) {
         Fridge fridge = getFridgeByUserId(userId);
         return fridge.getContenu();
     }
 
-    public List<Tags> getTagsByFridge(Long userId) {
+    public List<Tag> getTagsByFridge(UUID userId) {
         Fridge fridge = getFridgeByUserId(userId);
         return fridge.getTags();
     }

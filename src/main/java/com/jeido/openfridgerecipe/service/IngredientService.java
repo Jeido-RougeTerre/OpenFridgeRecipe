@@ -166,6 +166,10 @@ public class IngredientService {
 
     }
 
+    public boolean existByCode(String code) {
+        return ingredientRepository.existsById(code);
+    }
+
 
 
 }
