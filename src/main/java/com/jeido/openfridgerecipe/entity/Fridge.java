@@ -30,24 +30,10 @@ public class Fridge {
     )
     private List<Ingredient> contenu = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "fridge_tags",
-            joinColumns = @JoinColumn(name = "fridge_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
-    private List<Tag> tags = new ArrayList<>();
-
-    private int nbCouvert;
-
     public void addIngredient(Ingredient ingredient) {
         if (!contenu.contains(ingredient)) {
             contenu.add(ingredient);
         }
-    }
-
-    public void removeIngredient(Ingredient ingredient) {
-        contenu.remove(ingredient);
     }
 
 }
