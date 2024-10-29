@@ -1,12 +1,15 @@
 package com.jeido.openfridgerecipe.service;
 
-import com.jeido.openfridgerecipe.entity.Recipes;
-import com.jeido.openfridgerecipe.entity.Tag;
+import com.jeido.openfridgerecipe.dto.UserDtoReceive;
+import com.jeido.openfridgerecipe.dto.UserDtoRegister;
+import com.jeido.openfridgerecipe.dto.UserDtoSend;
 import com.jeido.openfridgerecipe.entity.User;
+import com.jeido.openfridgerecipe.exception.NotFoundException;
 import com.jeido.openfridgerecipe.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,8 +18,6 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private com.jeido.openfridgerecipe.entity.Ingredient Ingredient;
-    private Tag Tags;
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -24,33 +25,45 @@ public class UserService {
     }
 
 
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email " + email));
+    public List<UserDtoSend> getAllUsers() {
+        return ((List<User>) userRepository.findAll()).stream().map(this::userToSend).toList();
     }
 
 
-    public List<User> getAllUsers() {
-        return (List<User>) userRepository.findAll();
+    public UserDtoSend getUserById(UUID id) {
+        return userToSend(userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id " + id)));
     }
 
 
-    public User getUserById(UUID id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id " + id));
-    }
-
-
-    public User createUser(User user) {
+    public UserDtoSend createUser(UserDtoRegister user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email already exists!");
         }
-        return userRepository.save(user);
+
+
+        return userToSend(userRepository.save(
+                User.builder()
+                        .email(user.getEmail())
+                        .name(user.getName())
+                        .surname(user.getSurname())
+                        .password(user.getPassword())
+                        .favoriteRecipe(new ArrayList<>())
+                        .build()
+        ));
     }
 
 
-    public User updateUser(UUID id, User userDetails) {
-        return null;
+    public UserDtoSend updateUser(UUID id, UserDtoReceive userDetails) {
+
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found with id " + id));
+        user.setName(userDetails.getName());
+        user.setSurname(userDetails.getSurname());
+        user.setPassword(userDetails.getPassword());
+        user.setEmail(userDetails.getEmail());
+        user.setFavoriteRecipe(userDetails.getFavoriteRecipes());
+
+        return userToSend(userRepository.save(user));
     }
 
 
@@ -61,25 +74,16 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-
-    public void addFavoriteRecipe(UUID userId, Recipes recipe) {
-        User user = getUserById(userId);
-        user.addFavoriteRecipe(recipe);
-        if (recipe != null && !user.getRecettesFav().contains(recipe)) {
-            user.getRecettesFav().add(recipe);
-            userRepository.save(user);
-        }
+    private UserDtoSend userToSend(User user) {
+        return UserDtoSend.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .email(user.getEmail())
+                .isAdmin(user.isAdmin())
+                .favoriteRecipes(user.getFavoriteRecipe())
+                .build();
     }
-
-    
-    public void addDieteticIngredient(UUID userId, Tag tag){
-        User user = getUserById(userId);
-        if (!user.getIngredientsDietetique().contains(tag)) {
-            user.getIngredientsDietetique().add(tag);
-            userRepository.save(user);
-        }
-    }
-
 }
 
 
