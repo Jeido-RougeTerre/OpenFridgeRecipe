@@ -84,6 +84,14 @@ public class UserService {
                 .favoriteRecipes(user.getFavoriteRecipe())
                 .build();
     }
+
+    public UserDtoSend login(UserDtoReceive userDetails) {
+        if (!userRepository.existsByEmail(userDetails.getEmail())) return null;
+        User user = userRepository.findByEmail(userDetails.getEmail()).get();
+        if (!user.getPassword().equals(userDetails.getPassword())) return null;
+
+        return userToSend(user);
+    }
 }
 
 

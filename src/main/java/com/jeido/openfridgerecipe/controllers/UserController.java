@@ -31,6 +31,16 @@ public class UserController {
         return  ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<UserDtoSend> login(@RequestBody UserDtoReceive user) {
+        UserDtoSend userDto = userService.login(user);
+        if (userDto == null) {
+            return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        return  ResponseEntity.status(HttpStatus.OK).body(userDto);
+    }
+
 
     @GetMapping
     public ResponseEntity<List<UserDtoSend>> getAllUsers() {
