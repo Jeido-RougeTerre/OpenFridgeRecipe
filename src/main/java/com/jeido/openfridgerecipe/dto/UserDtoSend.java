@@ -19,5 +19,6 @@ public class UserDtoSend {
     private String surname;
     private List<Recipes> favoriteRecipes;
     private String email;
+    private Long fridgeId;
     private boolean isAdmin;
 }
