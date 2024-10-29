@@ -40,6 +40,6 @@ public class Recipes {
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> dieteticAlignment;
 
-    @ManyToMany(mappedBy = "recettesFav")
+    @ManyToMany(mappedBy = "favoriteRecipe")
     private List<User> users = new ArrayList<>();
 }

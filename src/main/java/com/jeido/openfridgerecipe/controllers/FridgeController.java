@@ -2,26 +2,22 @@ package com.jeido.openfridgerecipe.controllers;
 
 import com.jeido.openfridgerecipe.entity.*;
 import com.jeido.openfridgerecipe.service.FridgeService;
-import com.jeido.openfridgerecipe.service.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/fridges")
 public class FridgeController {
 
     private final FridgeService fridgeService;
-    private final IngredientService ingredientService;
 
     @Autowired
-    public FridgeController(FridgeService fridgeService, IngredientService ingredientService) {
+    public FridgeController(FridgeService fridgeService) {
         this.fridgeService = fridgeService;
-        this.ingredientService = ingredientService;
     }
 
 
