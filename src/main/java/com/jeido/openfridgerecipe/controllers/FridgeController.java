@@ -26,25 +26,25 @@ public class FridgeController {
 
 
     @GetMapping("/{userId}/recipes")
-    public ResponseEntity<List<Recipes>> getRecipesByUserFridge(@PathVariable Long userId) {
+    public ResponseEntity<List<Recipes>> getRecipesByUserFridge(@PathVariable UUID userId) {
         List<Recipes> suggestedRecipes = fridgeService.getSuggestedRecipes(userId);
         return ResponseEntity.ok(suggestedRecipes);
     }
 
     @GetMapping("/{userId}/ingredients")
-    public ResponseEntity<List<Ingredient>> getIngredientByFridge(@PathVariable Long userId) {
+    public ResponseEntity<List<Ingredient>> getIngredientByFridge(@PathVariable UUID userId) {
         List<Ingredient> ingredients = fridgeService.getIngredientsByFridge(userId);
         return ResponseEntity.ok(ingredients);
     }
 
     @GetMapping("/{userId}/tags")
-    public ResponseEntity<List<Tags>> getTagByFridge(@PathVariable Long userId) {
-        List<Tags> tags = fridgeService.getTagsByFridge(userId);
+    public ResponseEntity<List<Tag>> getTagByFridge(@PathVariable UUID userId) {
+        List<Tag> tags = fridgeService.getTagsByFridge(userId);
         return ResponseEntity.ok(tags);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Fridge> getFridge(@PathVariable Long userId) {
+    public ResponseEntity<Fridge> getFridge(@PathVariable UUID userId) {
         Fridge fridge = fridgeService.getFridgeByUserId(userId);
         return ResponseEntity.ok(fridge);
     }

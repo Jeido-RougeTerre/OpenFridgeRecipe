@@ -1,22 +1,16 @@
 package com.jeido.openfridgerecipe.dto;
 
-import com.jeido.openfridgerecipe.entity.Ingredient;
-import com.jeido.openfridgerecipe.entity.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecipesDtoReceive {
-    private UUID id;
     private String name;
-    private int CutleryNb;
-    private long CaloricNb;
-    private List<Ingredient> ingredients;
-    private List<Tag> dieteticAlignment;
+    private int cutleryNb;
+    private List<String> ingredientsCode;
 }

@@ -10,6 +10,8 @@ import com.jeido.openfridgerecipe.repository.RecipesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -17,10 +19,19 @@ import java.util.stream.Collectors;
 @Service
 public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDtoSend> {
 
+
+    private final RecipesRepository recipesRepository;
+
+    private final IngredientService ingredientService;
+
+    private final TagService tagService;
+
     @Autowired
-    private static RecipesRepository recipesRepository;
-    @Autowired
-    private IngredientService ingredientService;
+    public RecipesService(RecipesRepository recipesRepository, IngredientService ingredientService, TagService tagService) {
+        this.recipesRepository = recipesRepository;
+        this.ingredientService = ingredientService;
+        this.tagService = tagService;
+    }
 
     public Recipes getById (UUID id){
         return recipesRepository.findById(id).orElseThrow(()->new NotFoundException("Recipe not found at id :"+id));
@@ -42,15 +53,35 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
         return recipesRepository.findByIngredientsContaining(ing);
     }
 
+    private double computeCalories(Recipes recipes) {
+        List<Ingredient> ingredients = recipes.getIngredients();
+        double calories = 0.0;
+        for (Ingredient ingredient : ingredients) {
+            calories += ingredient.getCalories();
+        }
+        return calories;
+    }
+
     @Override
     public RecipesDtoSend create (RecipesDtoReceive recipesDtoReceive){
+        List<Ingredient> ingredients = new ArrayList<>();
+        for (String code : recipesDtoReceive.getIngredientsCode()) {
+            System.out.println("adding" + code);
+            ingredients.add(ingredientService.getIngredientByCode(code));
+
+        }
+
+        System.out.println("CREATED");
+        System.out.println(recipesDtoReceive.getCutleryNb());
+        System.out.println(recipesDtoReceive.getIngredientsCode().get(0));
+
         Recipes recipeCreated = Recipes.builder()
                 .name(recipesDtoReceive.getName())
-                .CutleryNb(recipesDtoReceive.getCutleryNb())
-                .CaloricNb(recipesDtoReceive.getCaloricNb())
-                //.ingredientsList(recipesDtoReceive.getIngredientsList())
-                .dieteticAlignment(recipesDtoReceive.getDieteticAlignment())
+                .cutleryNb(recipesDtoReceive.getCutleryNb())
+                .ingredients(ingredients)
                 .build();
+        recipeCreated.setDieteticAlignment(tagService.computeForRecipe(recipeCreated));
+        recipeCreated.setCaloricNb(computeCalories(recipeCreated));
 
         recipesRepository.save(recipeCreated);
         return recipeToRecipeDtoSend(recipeCreated);
@@ -66,8 +97,8 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
         Recipes recipe = getById(id);
         recipe.setName(received.getName());
         recipe.setCutleryNb(received.getCutleryNb());
-        recipe.setCaloricNb(received.getCaloricNb());
-        recipe.setDieteticAlignment(received.getDieteticAlignment());
+        recipe.setCaloricNb(computeCalories(recipe));
+        recipe.setDieteticAlignment(tagService.computeForRecipe(recipe));
 
         recipesRepository.save(recipe);
         return recipeToRecipeDtoSend(recipe);
@@ -84,9 +115,10 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
         return RecipesDtoSend.builder()
                 .id(recipes.getId())
                 .name(recipes.getName())
-                .CutleryNb(recipes.getCutleryNb())
-                .CaloricNb(recipes.getCaloricNb())
-                .dieteticAlignment(recipes.getDieteticAlignment())
+                .cutleryNb(recipes.getCutleryNb())
+                .caloricNb(recipes.getCaloricNb())
+                .ingredients(recipes.getIngredients())
+                .tags(recipes.getDieteticAlignment())
                 .build();
     }
 
@@ -94,8 +126,8 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
         return recipes.stream().map(this::recipeToRecipeDtoSend).collect(Collectors.toList());
     }
 
-    public static List<Recipes> suggestRecipesByIngredients(List<Ingredient> ingredients) {
-        return recipesRepository.findByIngredientsIn(ingredients);
+    public List<Recipes> suggestRecipesByIngredients(List<Ingredient> ingredients) {
+        return recipesRepository.findByIngredientsIn(Collections.singleton(ingredients));
     }
 
 }

@@ -17,8 +17,8 @@ import java.util.UUID;
 public class RecipesDtoSend {
     private UUID id;
     private String name;
-    private int CutleryNb;
-    private long CaloricNb;
+    private int cutleryNb;
+    private double caloricNb;
     private List<Ingredient> ingredients;
-    private List<Tag> dieteticAlignment;
+    private List<Tag> tags;
 }
