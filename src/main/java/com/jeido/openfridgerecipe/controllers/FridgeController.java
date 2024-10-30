@@ -39,7 +39,7 @@ public class FridgeController {
         return ResponseEntity.ok(fridgeService.addIngredientToFridge(id, code));
     }
 
-    @DeleteMapping("/{id}/ingredients/")
+    @DeleteMapping("/{id}/ingredients")
     public ResponseEntity<Fridge> removeAllIngredient(@PathVariable long id) {
         return ResponseEntity.ok(fridgeService.removeAllIngredients(id));
     }
