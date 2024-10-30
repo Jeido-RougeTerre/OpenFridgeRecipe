@@ -103,12 +103,91 @@
 
 ### FRIDGE 
 
-**W.I.P.**
+
+#### `/api/fridges/user/{{userId}}`
+- GET
+
+*returns fridge from user's id*
+
+#### `/api/fridges/{{id}}`
+- GET
+
+*returns fridge*
+
+#### `/api/fridges/{{id}}/ingredients`
+- GET
+
+*returns all ingredients in the fridge*
+
+- DELETE
+
+*delete all ingredients in the fridge*
+
+#### `/api/fridges/{{id}}/ingredients/{{code}}`
+- POST
+
+*add an ingredient to the fridge*
+
+- DELETE
+
+*delete a specific ingredient in the fridge*
+
+#### `/api/fridges/{{id}}/recipes`
+- GET
+
+*returns a suggested list of recipes from the ingredient list of the fridge*
+
+#### `/api/fridges/{{id}}/tags`
+- GET
+
+*returns a list of tags of all ingredients within the fridge*
 
 ### INGREDIENTS
 
+#### `/api/ingredients/{{code}}`
+- GET
+
+*returns the ingredient*
+
+
+#### `/api/ingredients/tags/{{tag1[,tag2,tag3,...]}}`
+- GET
+
+*returns a list of ingredient containing all the tags parsed*
+
+
+#### `/api/ingredients/search/{{terms}}[/{{page}}]`
+- GET
+
+*returns a Paginated Json*
 **W.I.P.**
 
-### RECIPES
 
+#### `/api/ingredients/calories/{{calories} | {caloriesMin}_{caloriesMax}}`
+- GET
 **W.I.P.**
+
+### RECIPES `/api/recipe`
+- GET
+
+*returns all recipes in database*
+
+- POST **WIP**
+
+
+#### `/api/recipe/{{id}}`
+- GET
+- PUT
+- DELETE
+
+
+#### `/api/recipe/tag/{{tag}}`
+- GET
+
+
+#### `/api/recipe/name/{{name}}`
+- GET
+
+
+#### `/api/recipe/ingredient/{{code}}`
+- GET
