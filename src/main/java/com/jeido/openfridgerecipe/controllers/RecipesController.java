@@ -2,8 +2,6 @@ package com.jeido.openfridgerecipe.controllers;
 
 import com.jeido.openfridgerecipe.dto.RecipesDtoReceive;
 import com.jeido.openfridgerecipe.dto.RecipesDtoSend;
-import com.jeido.openfridgerecipe.entity.Recipes;
-import com.jeido.openfridgerecipe.entity.Tag;
 import com.jeido.openfridgerecipe.service.RecipesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,26 +29,21 @@ public class RecipesController {
         return ResponseEntity.ok(recipesService.findById(id));
     }
 
-    @GetMapping("{tags}")
-    public ResponseEntity<List<RecipesDtoSend>> getRecipeByTag(@PathVariable("tags") Tag tag){
-        List<Recipes> recipesList = recipesService.getByTags(tag);
-        List<RecipesDtoSend> recipesDtoSends = new ArrayList<>();
-        for (Recipes recipe : recipesList){
-            recipesDtoSends.add(new RecipesDtoSend(recipe.getId(),recipe.getName(),recipe.getCutleryNb(),recipe.getCaloricNb(), recipe.getIngredients(), recipe.getDieteticAlignment()));
-        }
+    @GetMapping("/tag/{tag}")
+    public ResponseEntity<List<RecipesDtoSend>> getRecipeByTag(@PathVariable("tag") String tagName){
 
-        return ResponseEntity.ok(recipesDtoSends);
+        return ResponseEntity.ok(recipesService.findByTagName(tagName));
     }
 
-    @GetMapping("{ingredientCode}")
+    @GetMapping("/ingredient/{ingredientCode}")
     public ResponseEntity<List<RecipesDtoSend>> getRecipeByIngredientCode(@PathVariable("ingredientCode") String code){
-        List<Recipes> recipesList = recipesService.getByIngredientCode(code);
-        List<RecipesDtoSend> recipesDtoSends = new ArrayList<>();
-        for (Recipes recipe : recipesList){
-            recipesDtoSends.add(new RecipesDtoSend(recipe.getId(),recipe.getName(),recipe.getCutleryNb(),recipe.getCaloricNb(), recipe.getIngredients(), recipe.getDieteticAlignment()));
-        }
 
-        return ResponseEntity.ok(recipesDtoSends);
+        return ResponseEntity.ok(recipesService.getByIngredientCode(code));
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<RecipesDtoSend>> getRecipeByName(@PathVariable("name") String name){
+        return ResponseEntity.ok(recipesService.findByName(name));
     }
 
     @PostMapping

@@ -1,6 +1,6 @@
 package com.jeido.openfridgerecipe.service;
 
-import com.jeido.openfridgerecipe.dto.SearchDTOSend;
+import com.jeido.openfridgerecipe.dto.IngredientSearchDTOSend;
 import com.jeido.openfridgerecipe.repository.IngredientRepository;
 import com.jeido.openfridgerecipe.entity.Ingredient;
 import com.jeido.openfridgerecipe.entity.Tag;
@@ -56,7 +56,7 @@ public class IngredientService {
                 .build();
     }
 
-    private SearchDTOSend mapToIngredientList(IngredientSearchAPIResponse body) {
+    private IngredientSearchDTOSend mapToIngredientList(IngredientSearchAPIResponse body) {
         List<Ingredient> ingList = new ArrayList<>();
 
 
@@ -70,7 +70,7 @@ public class IngredientService {
         int nextPage = (body.getPage() == totalPage)? 0 : body.getPage() + 1;
 
 
-        return SearchDTOSend.builder()
+        return IngredientSearchDTOSend.builder()
                 .count(body.getCount())
                 .page(body.getPage())
                 .prevPage(prevPage)
@@ -109,16 +109,16 @@ public class IngredientService {
         }
     }
 
-    public SearchDTOSend getIngredientsByName(String name) {
+    public IngredientSearchDTOSend getIngredientsByName(String name) {
         return getIngredientsByName(name, 1);
     }
 
 
-    public SearchDTOSend getIngredientsByName(String name, int page) {
+    public IngredientSearchDTOSend getIngredientsByName(String name, int page) {
         final String uri = PRE_API_URI_SEARCH + name + "&page=" + page + POST_API_URI_SEARCH;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<IngredientSearchAPIResponse> response = restTemplate.getForEntity(uri, IngredientSearchAPIResponse.class);
-        SearchDTOSend search = mapToIngredientList(Objects.requireNonNull(response.getBody()));
+        IngredientSearchDTOSend search = mapToIngredientList(Objects.requireNonNull(response.getBody()));
         search.setSearchedTerm(name);
         return search;
     }

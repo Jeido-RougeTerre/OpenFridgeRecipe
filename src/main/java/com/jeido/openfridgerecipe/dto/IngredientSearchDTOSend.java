@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class SearchDTOSend {
+public class IngredientSearchDTOSend {
     private String searchedTerm;
     private int page; // page actuelle
     private int prevPage;

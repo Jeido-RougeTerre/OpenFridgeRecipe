@@ -1,5 +1,6 @@
 package com.jeido.openfridgerecipe.controllers;
 
+import com.jeido.openfridgerecipe.dto.RecipesDtoSend;
 import com.jeido.openfridgerecipe.entity.*;
 import com.jeido.openfridgerecipe.service.FridgeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ public class FridgeController {
 
 
     @GetMapping("/{id}/recipes")
-    public ResponseEntity<List<Recipes>> getRecipesByUserFridge(@PathVariable long id) {
-        List<Recipes> suggestedRecipes = fridgeService.getSuggestedRecipes(id);
+    public ResponseEntity<List<RecipesDtoSend>> getRecipesByUserFridge(@PathVariable long id) {
+        List<RecipesDtoSend> suggestedRecipes = fridgeService.getSuggestedRecipes(id);
         return ResponseEntity.ok(suggestedRecipes);
     }
 
