@@ -30,7 +30,9 @@ public class IngredientAPIController {
     public ResponseEntity<Ingredient> getIngredient(@PathVariable("code") String code) {
         Ingredient ing = ingredientService.getIngredientByCode(code);
 
-
+        if (ing == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return ResponseEntity.ok(ing);
     }
 

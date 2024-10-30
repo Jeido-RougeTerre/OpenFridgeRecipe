@@ -4,10 +4,7 @@ import com.jeido.openfridgerecipe.dto.SearchDTOSend;
 import com.jeido.openfridgerecipe.repository.IngredientRepository;
 import com.jeido.openfridgerecipe.entity.Ingredient;
 import com.jeido.openfridgerecipe.entity.Tag;
-import com.jeido.openfridgerecipe.service.json.IngredientAPIResponse;
-import com.jeido.openfridgerecipe.service.json.IngredientSearchAPIResponse;
-import com.jeido.openfridgerecipe.service.json.Product;
-import com.jeido.openfridgerecipe.service.json.ProductSearch;
+import com.jeido.openfridgerecipe.service.json.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -64,8 +61,10 @@ public class IngredientService {
 
 
         for (ProductSearch product : body.getProducts()) {
-            ingList.add(getIngredientByCode(product.getId()));
+            Ingredient ing = getIngredientByCode(product.getId());
+            if (ing != null) ingList.add(ing);
         }
+
         int prevPage = (body.getPage() > 1)? body.getPage() - 1 : 0;
         int totalPage = (int)Math.ceil((double)body.getCount() / body.getPageSize());
         int nextPage = (body.getPage() == totalPage)? 0 : body.getPage() + 1;
@@ -85,19 +84,29 @@ public class IngredientService {
     }
 
     public Ingredient getIngredientByCode(String code) {
-        return ingredientRepository.findById(code).orElse(getIngredientByCodeInAPI(code));
+        System.out.println(code + " is in DB : " + ingredientRepository.findById(code).isPresent());
+
+        if (ingredientRepository.findById(code).isPresent()) return ingredientRepository.findById(code).get();
+
+        return getIngredientByCodeInAPI(code);
     }
 
     private Ingredient getIngredientByCodeInAPI(String code) {
         final String uri = PRE_API_URI_CODE + code + POST_API_URI_CODE;
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<IngredientAPIResponse> response = restTemplate.getForEntity(uri, IngredientAPIResponse.class);
-        Ingredient ing = mapToIngredient(Objects.requireNonNull(response.getBody()));
-        if (!ingredientRepository.existsById(code)) {
-            ingredientRepository.save(ing);
-        }
 
-        return ing;
+        try {
+            ResponseEntity<IngredientAPIResponse> response = restTemplate.getForEntity(uri, IngredientAPIResponse.class);
+            Ingredient ing = mapToIngredient(Objects.requireNonNull(response.getBody()));
+
+            if (ing != null && !ingredientRepository.existsById(code)) {
+                ingredientRepository.save(ing);
+            }
+
+            return ing;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public SearchDTOSend getIngredientsByName(String name) {
@@ -164,10 +173,6 @@ public class IngredientService {
 
         return ingredientRepository.findByCaloriesBetween(caloriesMin, caloriesMax);
 
-    }
-
-    public boolean existByCode(String code) {
-        return ingredientRepository.existsById(code);
     }
 
 
