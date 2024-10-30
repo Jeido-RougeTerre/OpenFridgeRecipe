@@ -8,9 +8,9 @@
 
    `git clone https://github.com/Jeido-RougeTerre/OpenFridgeRecipe`
 
-3. Create in `./src/resources/` the file `application-secret.properties` and put your credential there :
+3. Create in `./src/main/resources/` the file `application-secret.properties` and put your credential there :
    ```properties
-   spring.datasource.url=jdbc:{{YOUR_DATABASE_DRIVER}}://{{YOUR_DATABASE_URL}}/{{YOUR_DATABASE_NAME}}
+   spring.datasource.url=jdbc:{{YOUR_DATABASE_DRIVER}}://{{YOUR_DATABASE_URL}}:{{YOUR_DATABASE_PORT}}/{{YOUR_DATABASE_NAME}}
    spring.datasource.username={{YOUR_DATABASE_USERNAME}}
    spring.datasource.password={{YOUR_DATABASE_PASSWORD}}
    ```
