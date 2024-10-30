@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class OpenFridgeRecipeApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(OpenFridgeRecipeApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(OpenFridgeRecipeApplication.class, args);
+    }
 
 }

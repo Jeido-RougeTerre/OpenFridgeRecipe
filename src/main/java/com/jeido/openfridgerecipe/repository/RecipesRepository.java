@@ -1,0 +1,17 @@
+package com.jeido.openfridgerecipe.repository;
+
+import com.jeido.openfridgerecipe.entity.Ingredient;
+import com.jeido.openfridgerecipe.entity.Recipes;
+import com.jeido.openfridgerecipe.entity.Tag;
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
+public interface RecipesRepository extends CrudRepository<Recipes, UUID> {
+    List<Recipes> findByNameLikeIgnoreCase(String name);
+    List<Recipes> findByDieteticAlignmentContains(Tag dieteticAlignment);
+    List<Recipes> findByIngredientsContaining(Ingredient ingredientCode);
+    List<Recipes> findByIngredientsIn(Collection<List<Ingredient>> ingredients);
+}
