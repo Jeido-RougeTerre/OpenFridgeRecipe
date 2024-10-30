@@ -1,5 +1,5 @@
 # Open Fridge Recipe (OFR)
-
+![api version](https://img.shields.io/badge/OFR-v1.0.0-green)
 ## How tow install
 1. You need a database
 
