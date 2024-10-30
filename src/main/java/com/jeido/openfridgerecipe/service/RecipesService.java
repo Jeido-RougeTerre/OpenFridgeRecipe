@@ -33,24 +33,22 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
         this.tagService = tagService;
     }
 
-    public Recipes getById (UUID id){
-        return recipesRepository.findById(id).orElseThrow(()->new NotFoundException("Recipe not found at id :"+id));
-    }
-
     @Override
     public RecipesDtoSend findById(UUID id) {
-        return recipeToRecipeDtoSend(getById(id));
+        return recipeToRecipeDtoSend(recipesRepository.findById(id).orElseThrow(()->new NotFoundException("Recipe not found at id :"+id)));
     }
 
-    public List<Recipes> getByTags (Tag tags) {
-        return recipesRepository.findByDieteticAlignmentContaining(tags);
+
+    public List<RecipesDtoSend> findByTagName(String tagName) {
+        Tag tag = tagService.findByName(tagName);
+        return recipesToRecipeDtoSends(recipesRepository.findByDieteticAlignmentContains(tag));
     }
 
-    public List<Recipes> getByIngredientCode (String ingredientCode) {
+    public List<RecipesDtoSend> getByIngredientCode (String ingredientCode) {
 
         Ingredient ing = ingredientService.getIngredientByCode(ingredientCode);
 
-        return recipesRepository.findByIngredientsContaining(ing);
+        return recipesToRecipeDtoSends(recipesRepository.findByIngredientsContaining(ing));
     }
 
     private double computeCalories(Recipes recipes) {
@@ -94,7 +92,7 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
 
     @Override
     public RecipesDtoSend update(UUID id, RecipesDtoReceive received) {
-        Recipes recipe = getById(id);
+        Recipes recipe = recipesRepository.findById(id).orElseThrow(()->new NotFoundException("Recipe not found at id :"+id));
         recipe.setName(received.getName());
         recipe.setCutleryNb(received.getCutleryNb());
         recipe.setCaloricNb(computeCalories(recipe));
@@ -106,7 +104,7 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
 
     @Override
     public boolean delete(UUID id) {
-        Recipes recipe = getById(id);
+        Recipes recipe = recipesRepository.findById(id).orElseThrow(()->new NotFoundException("Recipe not found at id :"+id));
         recipesRepository.delete(recipe);
         return true;
     }
@@ -126,8 +124,13 @@ public class RecipesService implements BaseService<RecipesDtoReceive, RecipesDto
         return recipes.stream().map(this::recipeToRecipeDtoSend).collect(Collectors.toList());
     }
 
-    public List<Recipes> suggestRecipesByIngredients(List<Ingredient> ingredients) {
-        return recipesRepository.findByIngredientsIn(Collections.singleton(ingredients));
+    public List<RecipesDtoSend> suggestRecipesByIngredients(List<Ingredient> ingredients) {
+        return recipesToRecipeDtoSends(recipesRepository.findByIngredientsIn(Collections.singleton(ingredients)));
+    }
+
+    public List<RecipesDtoSend> findByName(String name) {
+
+        return recipesToRecipeDtoSends(recipesRepository.findByNameLikeIgnoreCase(name));
     }
 
 }

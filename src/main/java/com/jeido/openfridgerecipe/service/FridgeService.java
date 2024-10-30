@@ -1,6 +1,7 @@
 package com.jeido.openfridgerecipe.service;
 
 
+import com.jeido.openfridgerecipe.dto.RecipesDtoSend;
 import com.jeido.openfridgerecipe.entity.*;
 import com.jeido.openfridgerecipe.exception.NotFoundException;
 import com.jeido.openfridgerecipe.repository.FridgeRepository;
@@ -57,7 +58,7 @@ public class FridgeService {
         return fridgeRepository.save(fridge);
     }
 
-    public List<Recipes> getSuggestedRecipes(long id) {
+    public List<RecipesDtoSend> getSuggestedRecipes(long id) {
         Fridge fridge = fridgeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Fridge not found with id: " + id));
 

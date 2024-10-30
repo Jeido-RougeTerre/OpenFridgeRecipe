@@ -1,6 +1,6 @@
 package com.jeido.openfridgerecipe.controllers;
 
-import com.jeido.openfridgerecipe.dto.SearchDTOSend;
+import com.jeido.openfridgerecipe.dto.IngredientSearchDTOSend;
 import com.jeido.openfridgerecipe.entity.Ingredient;
 import com.jeido.openfridgerecipe.service.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +37,12 @@ public class IngredientAPIController {
     }
 
     @GetMapping("/search/{terms}")
-    public ResponseEntity<SearchDTOSend> getIngredientsByTerms(@PathVariable("terms") String terms) {
+    public ResponseEntity<IngredientSearchDTOSend> getIngredientsByTerms(@PathVariable("terms") String terms) {
         return ResponseEntity.ok(ingredientService.getIngredientsByName(terms));
     }
 
     @GetMapping("/search/{terms}/{page}")
-    public ResponseEntity<SearchDTOSend> getIngredientsByTerms(@PathVariable("terms") String terms, @PathVariable("page") int page) {
+    public ResponseEntity<IngredientSearchDTOSend> getIngredientsByTerms(@PathVariable("terms") String terms, @PathVariable("page") int page) {
         return ResponseEntity.ok(ingredientService.getIngredientsByName(terms,page));
     }
 
