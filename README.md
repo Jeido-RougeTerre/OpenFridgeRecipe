@@ -3,7 +3,6 @@
 ## How tow install
 1. You need a database
 
-
 2. Clone the repo
 
    `git clone https://github.com/Jeido-RougeTerre/OpenFridgeRecipe`
@@ -14,14 +13,16 @@
    spring.datasource.username={{YOUR_DATABASE_USERNAME}}
    spring.datasource.password={{YOUR_DATABASE_PASSWORD}}
    ```
-4. By default the API is host on `https://localhost:8080` if you want to change the port add this line to the `application-secret.properties`
+4. By default, the API is host on `https://localhost:8080` if you want to change the port add this line to the `application-secret.properties`
    ```properties
-   spring.datasource.url=jdbc:{{YOUR_DATABASE_DRIVER}}://{{YOUR_DATABASE_URL}}/{{YOUR_DATABASE_NAME}}
+   spring.datasource.url=jdbc:{{YOUR_DATABASE_DRIVER}}://{{YOUR_DATABASE_URL}}:{{YOUR_DATABASE_PORT}}/{{YOUR_DATABASE_NAME}}
    spring.datasource.username={{YOUR_DATABASE_USERNAME}}
    spring.datasource.password={{YOUR_DATABASE_PASSWORD}}
    server.port={{YOUR_PORT}}
    ```
-5. You can now launch your project all the end point are listed in Api part below 
+5. You can now launch your project all the end point are listed in Api part below
+
+   ``mvn spring-boot:run``
 
 ## API
 
@@ -107,72 +108,92 @@
 #### `/api/fridges/user/{{userId}}`
 - GET
 
-*returns fridge from user's id*
+  *returns fridge from user's id*
 
 #### `/api/fridges/{{id}}`
 - GET
 
-*returns fridge*
+  *returns fridge*
 
 #### `/api/fridges/{{id}}/ingredients`
 - GET
 
-*returns all ingredients in the fridge*
+  *returns all ingredients in the fridge*
 
 - DELETE
 
-*delete all ingredients in the fridge*
+  *delete all ingredients in the fridge*
 
 #### `/api/fridges/{{id}}/ingredients/{{code}}`
 - POST
 
-*add an ingredient to the fridge*
+  *add an ingredient to the fridge*
 
 - DELETE
 
-*delete a specific ingredient in the fridge*
+  *delete a specific ingredient in the fridge*
 
 #### `/api/fridges/{{id}}/recipes`
 - GET
 
-*returns a suggested list of recipes from the ingredient list of the fridge*
+  *returns a suggested list of recipes from the ingredient list of the fridge*
 
 #### `/api/fridges/{{id}}/tags`
 - GET
 
-*returns a list of tags of all ingredients within the fridge*
+  *returns a list of tags of all ingredients within the fridge*
 
 ### INGREDIENTS
 
 #### `/api/ingredients/{{code}}`
 - GET
 
-*returns the ingredient*
+  *returns the ingredient*
 
 
 #### `/api/ingredients/tags/{{tag1[,tag2,tag3,...]}}`
 - GET
 
-*returns a list of ingredient containing all the tags parsed*
+  *returns a list of ingredient containing all the tags parsed*
 
 
 #### `/api/ingredients/search/{{terms}}[/{{page}}]`
 - GET
 
-*returns a Paginated Json*
-**W.I.P.**
+  *returns a Paginated Json*
+  ```json
+    {
+    "searchedTerm": "ban",
+    "page": 1,
+    "prevPage": 0,
+    "nextPage": 2,
+    "pageSize": 50,
+    "pageCount": 50,
+    "count": 54,
+    "totalPages": 2,
+    "results": ["..."]
+  }
+  ```
 
 
 #### `/api/ingredients/calories/{{calories} | {caloriesMin}_{caloriesMax}}`
 - GET
-**W.I.P.**
+
 
 ### RECIPES `/api/recipe`
 - GET
 
-*returns all recipes in database*
+  *returns all recipes in database*
 
-- POST **WIP**
+- POST 
+
+```json
+{
+  "name": "Recipe name",
+  "cutleryNb": 4,
+  "ingredientsCode": ["3700278400881", "3770000535068"]
+}
+```
 
 
 #### `/api/recipe/{{id}}`
